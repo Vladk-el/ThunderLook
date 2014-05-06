@@ -2,13 +2,14 @@
 #define MAINFRAME_H
 
 #include <QWidget>
+#include <QMainWindow>
 
-class MainFrame : public QWidget
+class MainFrame : public QMainWindow
 {
     Q_OBJECT
 
     public:
-        explicit MainFrame(QWidget *parent = 0);
+        MainFrame();
 
     signals:
 
