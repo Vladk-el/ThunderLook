@@ -1,6 +1,8 @@
 #ifndef MAINFRAME_H
 #define MAINFRAME_H
 
+#include <iostream>
+
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
@@ -30,15 +32,17 @@ class MainFrame : public QMainWindow
     signals:
 
     public slots:
+        void slot_new_mail();
 
     private:
         // Menus
         QMenu * menu_thunderlook;
-        QMenu * menu_file;
+        QMenu * menu_email;
 
         // Actions
         QAction * action_quit;
         QAction * action_new_mail;
+        QAction * action_get_mails;
 
         // ToolBars
         QToolBar * toolbar_top;
