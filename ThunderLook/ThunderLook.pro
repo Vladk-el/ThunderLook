@@ -8,3 +8,4 @@ HEADERS += \
 
 
 QT += widgets
+

@@ -8,6 +8,11 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QToolBar>
+#include <QListView>
+#include <QHBoxLayout>
+#include <QStringListModel>
+#include <QStringList>
+
 
 class MainFrame : public QMainWindow
 {
@@ -33,11 +38,42 @@ class MainFrame : public QMainWindow
 
         // Actions
         QAction * action_quit;
+        QAction * action_new_mail;
 
         // ToolBars
         QToolBar * toolbar_top;
+
+        // QistView && Model
+        QStringListModel * model_folders;
+        QListView * view_list_folders;
+
+        QStringListModel * model_mails;
+        QListView * view_list_mails;
+
+        // Central Widget
+        QWidget * widget_central;
+
+        // Layouts
+        QHBoxLayout * layout_main;
+
+
+
 
 
 };
 
 #endif // MAINFRAME_H
+
+
+
+
+
+
+
+
+
+
+
+
+
+
