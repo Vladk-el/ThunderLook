@@ -30,9 +30,9 @@ void MainFrame::addActions(){
     menu_email->addAction(action_new_mail);
 
     // Action new mail
-    action_get_mails = new QAction(tr("&Rafraichir"), this);
-    action_get_mails->setShortcut(QKeySequence("F5"));
-    menu_email->addAction(action_get_mails);
+    action_refresh_mails = new QAction(tr("&Rafraichir"), this);
+    action_refresh_mails->setShortcut(QKeySequence("F5"));
+    menu_email->addAction(action_refresh_mails);
 
     // Action quit
     action_quit = new QAction(tr("&Quitter"), this);
@@ -48,7 +48,7 @@ void MainFrame::addToolBars(){
 
     //toolbar_top->addAction(action_quit);
     toolbar_top->addAction(action_new_mail);
-    toolbar_top->addAction(action_get_mails);
+    toolbar_top->addAction(action_refresh_mails);
 
 
     //toolbar_top->setOrientation(Qt::Vertical);
@@ -85,6 +85,7 @@ void MainFrame::addSlotsConnexions(){
 
     connect(action_quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(action_new_mail, SIGNAL(triggered()), this, SLOT(slot_new_mail()));
+    connect(action_refresh_mails, SIGNAL(triggered()), this, SLOT(slot_refresh_mails()));
 }
 
 
@@ -93,6 +94,10 @@ void MainFrame::addSlotsConnexions(){
 
 void MainFrame::slot_new_mail(){
     cout << "Slot new mail" << endl;
+}
+
+void MainFrame::slot_refresh_mails(){
+    cout << "Slot refresh mail" << endl;
 }
 
 

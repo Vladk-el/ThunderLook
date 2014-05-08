@@ -33,6 +33,7 @@ class MainFrame : public QMainWindow
 
     public slots:
         void slot_new_mail();
+        void slot_refresh_mails();
 
     private:
         // Menus
@@ -42,7 +43,7 @@ class MainFrame : public QMainWindow
         // Actions
         QAction * action_quit;
         QAction * action_new_mail;
-        QAction * action_get_mails;
+        QAction * action_refresh_mails;
 
         // ToolBars
         QToolBar * toolbar_top;
