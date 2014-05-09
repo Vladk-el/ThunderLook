@@ -1,6 +1,8 @@
 #ifndef MAINFRAME_H
 #define MAINFRAME_H
 
+#include "sendnewemail.h"
+
 #include <iostream>
 
 #include <QApplication>
@@ -23,11 +25,12 @@ class MainFrame : public QMainWindow
     public:
         MainFrame();
 
-        void addMenus();
-        void addActions();
-        void addToolBars();
-        void addLayouts();
-        void addSlotsConnexions();
+        void setSize();
+        void setMenus();
+        void setActions();
+        void setToolBars();
+        void setLayouts();
+        void setSlotsConnexions();
 
     signals:
 

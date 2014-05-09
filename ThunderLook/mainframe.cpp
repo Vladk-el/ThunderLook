@@ -6,23 +6,28 @@ MainFrame::MainFrame()
 {
 
     // Init
-    addMenus();
-    addActions();
-    addToolBars();
-    addLayouts();
-    addSlotsConnexions();
+    setSize();
+    setMenus();
+    setActions();
+    setToolBars();
+    setLayouts();
+    setSlotsConnexions();
 
     show();
 }
 
 
-void MainFrame::addMenus(){
+void MainFrame::setSize(){
+    setMinimumSize(1200, 800);
+}
+
+void MainFrame::setMenus(){
 
     menu_thunderlook = menuBar()->addMenu(tr("&ThunderLook"));
     menu_email = menuBar()->addMenu(tr("&Email"));
 }
 
-void MainFrame::addActions(){
+void MainFrame::setActions(){
 
     // Action new mail
     action_new_mail = new QAction(tr("&Nouvel e-mail"), this);
@@ -42,7 +47,7 @@ void MainFrame::addActions(){
 
 }
 
-void MainFrame::addToolBars(){
+void MainFrame::setToolBars(){
 
     toolbar_top = addToolBar("Top");
 
@@ -54,7 +59,7 @@ void MainFrame::addToolBars(){
     //toolbar_top->setOrientation(Qt::Vertical);
 }
 
-void MainFrame::addLayouts(){
+void MainFrame::setLayouts(){
 
     widget_central = new QWidget;
     layout_main = new QHBoxLayout;
@@ -81,7 +86,7 @@ void MainFrame::addLayouts(){
     setCentralWidget(widget_central);
 }
 
-void MainFrame::addSlotsConnexions(){
+void MainFrame::setSlotsConnexions(){
 
     connect(action_quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(action_new_mail, SIGNAL(triggered()), this, SLOT(slot_new_mail()));
@@ -94,6 +99,8 @@ void MainFrame::addSlotsConnexions(){
 
 void MainFrame::slot_new_mail(){
     cout << "Slot new mail" << endl;
+    SendNewEmail * send_new_mail = new SendNewEmail;
+    send_new_mail->show();
 }
 
 void MainFrame::slot_refresh_mails(){

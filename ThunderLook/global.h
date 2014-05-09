@@ -3,6 +3,7 @@
 
 // ##### Files #####
 #include "mainframe.h"
+#include "sendnewemail.h"
 
 // ##### LIB #####
 #include <iostream>

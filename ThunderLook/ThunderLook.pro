@@ -13,7 +13,8 @@ SOURCES += \
     includes/smtpClient/src/mimepart.cpp \
     includes/smtpClient/src/mimetext.cpp \
     includes/smtpClient/src/quotedprintable.cpp \
-    includes/smtpClient/src/smtpclient.cpp
+    includes/smtpClient/src/smtpclient.cpp \
+    sendnewemail.cpp
 
 HEADERS += \
     global.h \
@@ -30,7 +31,8 @@ HEADERS += \
     includes/smtpClient/src/mimetext.h \
     includes/smtpClient/src/quotedprintable.h \
     includes/smtpClient/src/smtpclient.h \
-    includes/smtpClient/src/SmtpMime
+    includes/smtpClient/src/SmtpMime \
+    sendnewemail.h
 
 
 QT += widgets core network

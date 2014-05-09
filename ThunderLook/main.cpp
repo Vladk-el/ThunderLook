@@ -10,7 +10,7 @@ int main(int argc, char * argv[]){
     frame.show();
 
 
-    smtp_test();
+    //smtp_test();
 
     return app.exec();
 }
