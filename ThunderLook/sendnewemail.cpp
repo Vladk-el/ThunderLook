@@ -66,7 +66,7 @@ void SendNewEmail::send(){
 
     message.setSubject(line_subject->text());
 
-    MimeText * text;
+    MimeText * text = new MimeText;
 
     text->setText(text_content->toPlainText());
 
