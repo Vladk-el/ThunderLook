@@ -30,3 +30,6 @@ Makefile*
 # Build
 
 build-ThunderLook*
+
+# Testing - conf files
+*.ini
