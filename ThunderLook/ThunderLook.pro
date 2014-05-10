@@ -1,7 +1,7 @@
 SOURCES += \
-    main.cpp \
-    mainframe.cpp \
-    smtp.cpp \
+    src/main.cpp \
+    src/mainframe.cpp \
+    src/smtp.cpp \
     includes/smtpClient/src/emailaddress.cpp \
     includes/smtpClient/src/mimeattachment.cpp \
     includes/smtpClient/src/mimecontentformatter.cpp \
@@ -14,11 +14,12 @@ SOURCES += \
     includes/smtpClient/src/mimetext.cpp \
     includes/smtpClient/src/quotedprintable.cpp \
     includes/smtpClient/src/smtpclient.cpp \
-    sendnewemail.cpp
+    src/sendnewemail.cpp \
+    src/settings.cpp
 
 HEADERS += \
-    global.h \
-    mainframe.h \
+    src/global.h \
+    src/mainframe.h \
     includes/smtpClient/src/emailaddress.h \
     includes/smtpClient/src/mimeattachment.h \
     includes/smtpClient/src/mimecontentformatter.h \
@@ -32,8 +33,12 @@ HEADERS += \
     includes/smtpClient/src/quotedprintable.h \
     includes/smtpClient/src/smtpclient.h \
     includes/smtpClient/src/SmtpMime \
-    sendnewemail.h
+    src/sendnewemail.h \
+    src/settings.h
 
 
 QT += widgets core network
+
+RESOURCES += \
+    ressources.qrc
 
