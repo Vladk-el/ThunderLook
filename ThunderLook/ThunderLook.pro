@@ -42,3 +42,6 @@ QT += widgets core network
 RESOURCES += \
     ressources.qrc
 
+OTHER_FILES += \
+    data/settings/settings.ini
+

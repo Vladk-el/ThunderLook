@@ -8,11 +8,9 @@ int main(int argc, char * argv[]){
 
     //MainFrame frame;
 
-    Settings frame;
+    QSettings * global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
 
-
-    frame.show();
-
+    Settings settings(global_settings);
 
     //smtp_test();
 

@@ -2,6 +2,7 @@
 #define MAINFRAME_H
 
 #include "sendnewemail.h"
+#include "settings.h"
 
 #include <iostream>
 
@@ -43,7 +44,7 @@ class MainFrame : public QMainWindow
 
     private:
         // QSettings
-        QSettings * settings;
+        QSettings * global_settings;
 
         // Menus
         QMenu * menu_thunderlook;

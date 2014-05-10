@@ -11,17 +11,18 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QComboBox>
+#include <QSettings>
 
 class Settings : public QWidget
 {
     Q_OBJECT
 
     public:
-        Settings();
+        Settings(QSettings *);
 
-        void setAccountTab();
-        void setSendTab();
-        void setReceptionTab();
+        void setAccountTab(QSettings *);
+        void setSendTab(QSettings *);
+        void setReceptionTab(QSettings *);
 
     signals:
 

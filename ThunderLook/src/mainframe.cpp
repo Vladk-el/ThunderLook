@@ -16,11 +16,15 @@ MainFrame::MainFrame()
     setSlotsConnexions();
 
     show();
+
+    /*Settings settings(global_settings);
+
+    settings.show();*/
 }
 
 
 void MainFrame::setSettings(){
-    settings = new QSettings("../data/settings/settings.ini", QSettings::IniFormat);
+    global_settings = new QSettings("../data/settings/settings.ini", QSettings::IniFormat);
 }
 
 void MainFrame::setSize(){

@@ -1,6 +1,6 @@
 #include "settings.h"
 
-Settings::Settings()
+Settings::Settings(QSettings * settings)
 {
 
     setWindowTitle(tr("Paramètres du compte"));
@@ -19,32 +19,35 @@ Settings::Settings()
     layout_main->addLayout(layout_buttons);
 
 
-    setAccountTab();
-    setSendTab();
-    setReceptionTab();
+    setAccountTab(settings);
+    setSendTab(settings);
+    setReceptionTab(settings);
 
     setLayout(layout_main);
 
+    show();
 }
 
 
-void Settings::setAccountTab(){
+void Settings::setAccountTab(QSettings * settings){
     tab_account = new QWidget;
         layout_tab_account = new QVBoxLayout;
             label_account_name = new QLabel(tr("Nom du compte"));
-            line_account_name = new QLineEdit;
+            line_account_name = new QLineEdit(settings->value("Account/account_name").toString());
             label_name = new QLabel(tr("Nom de l'utilisateur"));
-            line_name = new QLineEdit;
+            line_name = new QLineEdit(settings->value("Account/user_name").toString());
             label_email = new QLabel(tr("Adresse email"));
-            line_email = new QLineEdit;
+            line_email = new QLineEdit(settings->value("Account/user_email").toString());
             label_signature = new QLabel(tr("Signature"));
-            line_signature = new QTextEdit;
+            line_signature = new QTextEdit();
+                line_signature->setText(settings->value("Account/user_signature").toString());
             label_synchronization = new QLabel(tr("Fréquence de synchronisation"));
             line_synchronization = new QSpinBox;
                 line_synchronization->setMinimum(5);
                 line_synchronization->setSingleStep(5);
                 line_synchronization->setMaximum(60);
                 line_synchronization->setSuffix(tr(" minutes"));
+                line_synchronization->setValue(settings->value("Account/user_synchro").toInt());
 
         layout_tab_account->addWidget(label_account_name);
         layout_tab_account->addWidget(line_account_name);
@@ -62,17 +65,17 @@ void Settings::setAccountTab(){
     qtab_settings->addTab(tab_account, tr("Compte"));
 }
 
-void Settings::setSendTab(){
+void Settings::setSendTab(QSettings * settings){
     tab_send = new QWidget;
         layout_tab_send = new QVBoxLayout;
             label_smtp_name = new QLabel(tr("Serveur SMTP"));
-            line_smtp_name = new QLineEdit;
+            line_smtp_name = new QLineEdit(settings->value("Send/smtp_server").toString());
             label_smtp_port = new QLabel(tr("Port"));
-            line_smtp_port = new QLineEdit;
+            line_smtp_port = new QLineEdit(settings->value("Send/smtp_port").toString());
             label_smtp_user = new QLabel(tr("Nom d'utilisateur"));
-            line_smtp_user = new QLineEdit;
+            line_smtp_user = new QLineEdit(settings->value("Send/smtp_user").toString());
             label_smtp_password = new QLabel(tr("Mot de passe"));
-            line_smtp_password = new QLineEdit;
+            line_smtp_password = new QLineEdit(settings->value("Send/smtp_password").toString());
                 line_smtp_password->setEchoMode(QLineEdit::Password);
 
         layout_tab_send->addWidget(label_smtp_name);
@@ -90,22 +93,23 @@ void Settings::setSendTab(){
     qtab_settings->addTab(tab_send, tr("Envoi"));
 }
 
-void Settings::setReceptionTab(){
+void Settings::setReceptionTab(QSettings * settings){
     tab_recept = new QWidget;
         layout_tab_recept = new QVBoxLayout;
-            label_recept_name = new QLabel(tr("Serveur SMTP"));
-            line_recept_name = new QLineEdit;
+            label_recept_name = new QLabel(tr("Serveur"));
+            line_recept_name = new QLineEdit(settings->value("Reception/reception_server").toString());
             label_recept_port = new QLabel(tr("Port"));
-            line_recept_port = new QLineEdit;
+            line_recept_port = new QLineEdit(settings->value("Reception/reception_port").toString());
             label_recept_user = new QLabel(tr("Nom d'utilisateur"));
-            line_recept_user = new QLineEdit;
+            line_recept_user = new QLineEdit(settings->value("Reception/reception_user").toString());
             label_recept_password = new QLabel(tr("Mot de passe"));
-            line_recept_password = new QLineEdit;
+            line_recept_password = new QLineEdit(settings->value("Reception/reception_password").toString());
                 line_recept_password->setEchoMode(QLineEdit::Password);
             label_recept_delete_on_server = new QLabel(tr("Supprimer les mails du serveur"));
             line_recept_delete_on_server = new QComboBox;
                 line_recept_delete_on_server->addItem(tr("Jamais"));
                 line_recept_delete_on_server->addItem(tr("Si messages supprimés de la boite de réception"));
+                line_recept_delete_on_server->setCurrentIndex(settings->value("Reception/reception_delete_on_server").toInt());
 
         layout_tab_recept->addWidget(label_recept_name);
         layout_tab_recept->addWidget(line_recept_name);
