@@ -15,7 +15,7 @@ class InitConfig : public QWidget
     Q_OBJECT
 
     public:
-        InitConfig(QWidget * mainframe);
+        InitConfig();
 
         void setWelcomeInterface();
         void setAccountInterface();

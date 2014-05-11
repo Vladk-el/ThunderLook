@@ -79,7 +79,7 @@ void SendNewEmail::verifyLineAddress(QLineEdit * line){
 void SendNewEmail::send(){
     cout << "send()" << endl;
 
-    SmtpClient * smtp = NULL;
+    //SmtpClient * smtp = NULL;
 
     if(settings->value("Send/smtp_server").toInt() == 1)
         smtp = new SmtpClient(settings->value("Send/smtp_server").toString(), settings->value("Send/smtp_port").toInt(), SmtpClient::SslConnection);

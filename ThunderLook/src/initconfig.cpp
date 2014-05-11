@@ -1,6 +1,6 @@
 #include "initconfig.h"
 
-InitConfig::InitConfig(QWidget * mainframe)
+InitConfig::InitConfig()
 {
 
     setWindowTitle(tr("ThunderLook - Bienvenue"));
@@ -31,7 +31,7 @@ void InitConfig::setWelcomeInterface(){
             label_welcome_present = new QLabel;
             label_welcome_present->setText("Thunderlook est un client mail légé et fiable, qui comblera toute vos attente en matière de \ngestion et envoi de vos mails personnels ou professionnels.\n\n");
             label_welcome_config = new QLabel;
-            label_welcome_config->setText("Avant de commencer, veuillez remplir les quelques informations relatives à votre compte email. \n\nCliquez sur \"Suivant\" pour continuer la configuration de votre compte.");
+            label_welcome_config->setText("Avant de continuer, veuillez remplir les quelques informations relatives à votre compte email. \n\n\nCliquez sur \"Suivant\" pour commencer la configuration de votre compte.");
             layout_welcome_buttons = new QHBoxLayout;
                 welcome_quit = new QPushButton(tr("Quitter"));
                 welcome_next = new QPushButton(tr("Suivant"));
@@ -264,7 +264,8 @@ void InitConfig::displayReceptionInterface(){
 
 void InitConfig::display_main_frame(){
     updateReceptionConfig();
-    // Trouver un moyen de retourner sur MainFrame
+    settings->setValue("account_configured", true);
+    emit destroyed();
     close();
 }
 

@@ -60,6 +60,9 @@ class SendNewEmail : public QWidget
         // QTextEdit
         QTextEdit * text_content;
 
+        // SmtpClient
+        SmtpClient * smtp;
+
 };
 
 #endif // SENDNEWEMAIL_H

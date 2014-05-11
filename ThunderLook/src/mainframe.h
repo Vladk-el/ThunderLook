@@ -27,6 +27,7 @@ class MainFrame : public QMainWindow
 
     public:
         MainFrame();
+        ~MainFrame();
 
         void setSettings();
 
@@ -48,6 +49,7 @@ class MainFrame : public QMainWindow
         void slot_new_mail();
         void slot_refresh_mails();
         void slot_configure_account();
+        void slot_launch();
 
     private:
         // QSettings

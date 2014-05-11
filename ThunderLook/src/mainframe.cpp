@@ -4,16 +4,22 @@ using namespace std;
 
 MainFrame::MainFrame()
 {
-
     setSettings();
+
     if(global_settings->value("account_configured").toBool())
         init();
     else
         initConfig();
 }
 
+MainFrame::~MainFrame()
+{
+    std::cout << "MainFrame destoyed" << std::endl;
+}
+
 void MainFrame::initConfig(){
-    InitConfig * initConfig = new InitConfig(this);
+    InitConfig * initConfig = new InitConfig();
+    connect(initConfig, SIGNAL(destroyed()), this, SLOT(slot_launch())); // Voir ce qui cloche avec ça
 }
 
 void MainFrame::init(){
@@ -30,7 +36,7 @@ void MainFrame::init(){
 
 
 void MainFrame::setSettings(){
-    global_settings = new QSettings("../data/settings/settings.ini", QSettings::IniFormat);
+    global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
 }
 
 void MainFrame::setSize(){
@@ -148,6 +154,12 @@ void MainFrame::slot_configure_account(){
     cout << "Slot configure account" << endl;
 
     Settings * settings = new Settings;
+}
+
+void MainFrame::slot_launch(){
+    global_settings->sync();
+    if(global_settings->value("account_configured").toBool())
+        init();
 }
 
 
