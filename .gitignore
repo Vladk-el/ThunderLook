@@ -32,4 +32,4 @@ Makefile*
 build-ThunderLook*
 
 # Testing - conf files
-*.ini
+*perso.ini
