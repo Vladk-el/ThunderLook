@@ -15,7 +15,8 @@ SOURCES += \
     includes/smtpClient/src/quotedprintable.cpp \
     includes/smtpClient/src/smtpclient.cpp \
     src/sendnewemail.cpp \
-    src/settings.cpp
+    src/settings.cpp \
+    src/initconfig.cpp
 
 HEADERS += \
     src/global.h \
@@ -34,7 +35,8 @@ HEADERS += \
     includes/smtpClient/src/smtpclient.h \
     includes/smtpClient/src/SmtpMime \
     src/sendnewemail.h \
-    src/settings.h
+    src/settings.h \
+    src/initconfig.h
 
 
 QT += widgets core network

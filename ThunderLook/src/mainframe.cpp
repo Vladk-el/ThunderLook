@@ -6,7 +6,17 @@ MainFrame::MainFrame()
 {
 
     setSettings();
+    if(global_settings->value("account_configured").toBool())
+        init();
+    else
+        initConfig();
+}
 
+void MainFrame::initConfig(){
+    InitConfig * initConfig = new InitConfig(this);
+}
+
+void MainFrame::init(){
     // Init si fichier de conf OK
     setSize();
     setMenus();
@@ -114,7 +124,10 @@ void MainFrame::setSlotsConnexions(){
     connect(action_refresh_mails, SIGNAL(triggered()), this, SLOT(slot_refresh_mails()));
     connect(action_configure_account, SIGNAL(triggered()), this, SLOT(slot_configure_account()));
 
+}
 
+QSettings * MainFrame::getSettings(){
+    return global_settings;
 }
 
 

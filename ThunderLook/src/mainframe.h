@@ -3,6 +3,7 @@
 
 #include "sendnewemail.h"
 #include "settings.h"
+#include "initconfig.h"
 
 #include <iostream>
 
@@ -28,12 +29,18 @@ class MainFrame : public QMainWindow
         MainFrame();
 
         void setSettings();
+
+        void initConfig();
+        void init();
         void setSize();
         void setMenus();
         void setActions();
         void setToolBars();
         void setLayouts();
         void setSlotsConnexions();
+
+        // Getters
+        QSettings * getSettings();
 
     signals:
 
