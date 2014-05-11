@@ -15,6 +15,7 @@
 #include <QFormLayout>
 #include <QGridLayout>
 #include <QLabel>
+#include <QSettings>
 
 class SendNewEmail : public QWidget
 {
@@ -31,6 +32,9 @@ class SendNewEmail : public QWidget
         void send();
 
     private:
+        // QSettings
+        QSettings * settings;
+
         // Layouts
         QVBoxLayout * layout_main;
         QHBoxLayout * layout_top;

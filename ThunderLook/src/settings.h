@@ -1,6 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <iostream>
 #include <QWidget>
 #include <QTabWidget>
 #include <QVBoxLayout>
@@ -18,17 +19,23 @@ class Settings : public QWidget
     Q_OBJECT
 
     public:
-        Settings(QSettings *);
+        Settings();
 
-        void setAccountTab(QSettings *);
-        void setSendTab(QSettings *);
-        void setReceptionTab(QSettings *);
+        void setMainLayout();
+        void setAccountTab();
+        void setSendTab();
+        void setReceptionTab();
+        void setSlotsConnexions();
 
     signals:
 
     public slots:
+        void save();
 
     private:
+        // QSettings
+        QSettings * settings;
+
         // QTabWidget
         QTabWidget * qtab_settings;
 
@@ -62,6 +69,8 @@ class Settings : public QWidget
             QLineEdit * line_smtp_user;
             QLabel * label_smtp_password;
             QLineEdit * line_smtp_password;
+            QLabel * label_smtp_security;
+            QComboBox * line_stmp_security;
 
 
         QWidget * tab_recept;
@@ -76,6 +85,8 @@ class Settings : public QWidget
             QLineEdit * line_recept_password;
             QLabel * label_recept_delete_on_server;
             QComboBox * line_recept_delete_on_server;
+            QLabel * label_recept_security;
+            QComboBox * line_recept_security;
 
 
         // QPushButtons

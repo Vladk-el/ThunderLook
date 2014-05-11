@@ -16,10 +16,6 @@ MainFrame::MainFrame()
     setSlotsConnexions();
 
     show();
-
-    /*Settings settings(global_settings);
-
-    settings.show();*/
 }
 
 
@@ -137,6 +133,8 @@ void MainFrame::slot_refresh_mails(){
 
 void MainFrame::slot_configure_account(){
     cout << "Slot configure account" << endl;
+
+    Settings * settings = new Settings;
 }
 
 
