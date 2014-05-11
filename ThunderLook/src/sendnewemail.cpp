@@ -49,8 +49,33 @@ void SendNewEmail::setMainIHM(){
 void SendNewEmail::setSlotsConnexions(){
 
     connect(button_send, SIGNAL(clicked()), this, SLOT(send()));
+    connect(line_to, SIGNAL(textChanged(QString)), this, SLOT(verifyLineTo()));
+    connect(line_copy, SIGNAL(textChanged(QString)), this, SLOT(verifyLineCopy()));
 }
 
+bool SendNewEmail::isEmailAddress(QString addr){
+    if ( addr.length() == 0 ) return false;
+
+    QString strPatt = "\\b[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Za-z]{2,4}\\b";
+    QRegExp rx(strPatt);
+    return rx.exactMatch(addr);
+}
+
+void SendNewEmail::verifyLineAddress(QLineEdit * line){
+    std::cout << "End editing" << std::endl;
+    if(!(isEmailAddress(line->text()))){
+        QPalette palette;
+        palette.setColor(QPalette::Text,Qt::red);
+        line->setPalette(palette);
+    }
+    else{
+        QPalette palette;
+        palette.setColor(QPalette::Text,Qt::green);
+        line->setPalette(palette);
+    }
+}
+
+// Slots
 void SendNewEmail::send(){
     cout << "send()" << endl;
 
@@ -93,6 +118,13 @@ void SendNewEmail::send(){
 
 
 
+void SendNewEmail::verifyLineTo(){
+    verifyLineAddress(line_to);
+}
+
+void SendNewEmail::verifyLineCopy(){
+    verifyLineAddress(line_copy);
+}
 
 
 
