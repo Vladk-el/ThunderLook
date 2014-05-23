@@ -4,6 +4,9 @@
 #include "sendnewemail.h"
 #include "settings.h"
 #include "initconfig.h"
+#include "previewedemail.h"
+
+#include "global.h"
 
 #include <iostream>
 
@@ -73,14 +76,15 @@ class MainFrame : public QMainWindow
         QStringListModel * model_folders;
         QListView * view_list_folders;
 
-        QStringListModel * model_mails;
-        QListView * view_list_mails;
-
-        // Central Widget
+        // Widgets
         QWidget * widget_central;
+        QWidget * widget_previewed;
+        QWidget * widget_detailled;
 
         // Layouts
         QHBoxLayout * layout_main;
+        QVBoxLayout * layout_previewed;
+        QVBoxLayout * layout_detailled;
 
 
 

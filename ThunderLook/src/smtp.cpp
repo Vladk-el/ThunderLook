@@ -1,7 +1,6 @@
 
 #include "includes/smtpClient/src/SmtpMime"
 
-
 int smtp_test()
 {
     // This is a first demo application of the SmtpClient for Qt project
@@ -39,10 +38,31 @@ int smtp_test()
 
     // Now we can send the mail
 
-    smtp.connectToHost();
+    /*smtp.connectToHost();
     smtp.login();
     smtp.sendMail(message);
-    smtp.quit();
-
+    smtp.quit();*/
     return 0;
+}
+
+MimeMessage * construct()
+{
+    SmtpClient smtp("smtp.gmail.com", 465, SmtpClient::SslConnection);
+
+    smtp.setUser("eliott.laversin@gmail.com");
+    smtp.setPassword("chajotensim");
+
+    MimeMessage * message = new MimeMessage;
+
+    message->setSender(new EmailAddress("eliott.laversin@gmail.com", "Eliott Laversin"));
+    message->addRecipient(new EmailAddress("eliott.laversin@gmail.com", "Eliott Laversin"));
+    message->setSubject("SmtpClient for Qt - Test in ThunderLook");
+
+    MimeText text;
+
+    text.setText("Test\n");
+
+    message->addPart(&text);
+
+    return message;
 }

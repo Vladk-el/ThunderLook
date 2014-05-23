@@ -10,5 +10,14 @@ int main(int argc, char * argv[]){
 
     //Settings settings;
 
+    //MimeMessage * test = construct();
+
+    //PreviewedEmail previewedEmail(test);
+
+    //DetailledEmail detailledEmail(test);
+
+
     return app.exec();
 }
+
+

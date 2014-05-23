@@ -5,6 +5,9 @@
 #include "mainframe.h"
 #include "sendnewemail.h"
 #include "settings.h"
+#include "previewedemail.h"
+#include "detailledemail.h"
+
 
 // ##### LIB #####
 #include <iostream>
@@ -13,5 +16,8 @@
 
 // ##### EXTERN LIB #####
 
+
+
+MimeMessage * construct();
 
 #endif // GLOBAL_H

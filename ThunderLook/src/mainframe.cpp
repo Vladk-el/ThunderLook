@@ -94,29 +94,63 @@ void MainFrame::setLayouts(){
     widget_central = new QWidget;
     layout_main = new QHBoxLayout;
 
+    // TEST MESSAGES MODEL
+    /*MimeMessage * test = construct();
+
+    PreviewedEmail * previewedEmail = new PreviewedEmail(test);
+    */
+
+    // Folders
     QStringList folders;
     folders << "Folder1" << "Folder2" << "Folder3" << "Folder4" ;
     model_folders = new QStringListModel(folders);
     view_list_folders = new QListView;
     view_list_folders->setModel(model_folders);
-    QSizePolicy spLeft(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    view_list_folders->setMaximumWidth(this->width()/10);
+    //QSizePolicy spLeft(QSizePolicy::Minimum, QSizePolicy::Minimum);
     //spLeft.setHorizontalStretch(1);
-    view_list_folders->setSizePolicy(spLeft);
+    //view_list_folders->setSizePolicy(spLeft);
 
-    QStringList mails;
-    mails << "Mail1" << "Mail2" << "Mail3" << "Mail4" << "Mail5";
-    model_mails = new QStringListModel(mails);
-    view_list_mails = new QListView;
-    view_list_mails->setModel(model_mails);
-    QSizePolicy spRight(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    //spRight.setHorizontalStretch(10);
-    view_list_folders->setSizePolicy(spRight);
+
+    // Previewed mail
+    widget_previewed = new QWidget;
+        layout_previewed = new QVBoxLayout;
+
+            MimeMessage * test = construct();
+
+            PreviewedEmail * pe1 = new PreviewedEmail(test);
+            PreviewedEmail * pe2 = new PreviewedEmail(test);
+            PreviewedEmail * pe3 = new PreviewedEmail(test);
+
+            layout_previewed->addWidget(pe1);
+            layout_previewed->addWidget(pe2);
+            layout_previewed->addWidget(pe3);
+            layout_previewed->addStretch(1);
+
+        widget_previewed->setLayout(layout_previewed);
+
+        QPalette p;
+        p.setColor(QPalette::Background, Qt::white);
+        widget_previewed->setAutoFillBackground(true);
+        widget_previewed->setPalette(p);
+        widget_previewed->setMaximumWidth(3*this->width()/10);
+
+
+    // Detailled mail
+    widget_detailled = new QWidget;
+        layout_detailled = new QVBoxLayout;
+            DetailledEmail * detailledEmail = new DetailledEmail(test);
+
+            layout_detailled->addWidget(detailledEmail);
+
+        widget_detailled->setLayout(layout_detailled);
+        widget_previewed->setMaximumWidth(6*this->width()/10);
+
+
 
     layout_main->addWidget(view_list_folders);
-    layout_main->addWidget(view_list_mails);
-
-
-
+    layout_main->addWidget(widget_previewed);
+    layout_main->addWidget(widget_detailled);
 
 
     widget_central->setLayout(layout_main);
