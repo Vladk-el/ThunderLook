@@ -1,21 +1,3 @@
-/*
-  Copyright (c) 2011-2012 - Tőkés Attila
-
-  This file is part of SmtpClient for Qt.
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  See the LICENSE file for more details.
-*/
-
 #include "mimemessage.h"
 
 #include <QDateTime>
@@ -96,9 +78,37 @@ void MimeMessage::setSubject(const QString & subject)
     this->subject = subject;
 }
 
+const QString & MimeMessage::getSubject() const
+{
+    return subject;
+}
+
+
+const QString & MimeMessage::getIndice() const
+{
+    return this->indice;
+}
+
+void MimeMessage::setIndice(const QString & indice)
+{
+    this->indice = indice;
+}
+
+const QString & MimeMessage::getDate() const
+{
+    return this->date;
+}
+
+void MimeMessage::setDate(const QString & date)
+{
+    this->date = date;
+}
+
 void MimeMessage::addPart(MimePart *part)
 {
-    if (typeid(*content) == typeid(MimeMultiPart)) {
+    if (typeid(*content) == typeid(MimeMultiPart))
+    {
+        // qDebug() << "Ok addPart" << part->getContent() << endl;
         ((MimeMultiPart*) content)->addPart(part);
     };
 }
@@ -127,11 +137,6 @@ const QList<EmailAddress*> & MimeMessage::getRecipients(RecipientType type) cons
     }
 }
 
-const QString & MimeMessage::getSubject() const
-{
-    return subject;
-}
-
 const QList<MimePart*> & MimeMessage::getParts() const
 {
     if (typeid(*content) == typeid(MimeMultiPart)) {
@@ -153,6 +158,7 @@ QString MimeMessage::toString()
 {
     QString mime;
 
+
     /* =========== MIME HEADER ============ */
 
     /* ---------- Sender / From ----------- */
@@ -171,6 +177,9 @@ QString MimeMessage::toString()
             mime += " " + sender->getName();
         }
     }
+
+
+
     mime += " <" + sender->getAddress() + ">\r\n";
     /* ---------------------------------- */
 
@@ -198,6 +207,7 @@ QString MimeMessage::toString()
         }
         mime += " <" + (*it)->getAddress() + ">";
     }
+
     mime += "\r\n";
     /* ---------------------------------- */
 
@@ -224,15 +234,17 @@ QString MimeMessage::toString()
             }
         }
         mime += " <" + (*it)->getAddress() + ">";
+                qDebug() << "After getCC" << endl;
     }
     if (recipientsCc.size() != 0) {
         mime += "\r\n";
     }
+
+
     /* ---------------------------------- */
 
     /* ------------ Subject ------------- */
     mime += "Subject: ";
-
 
     switch (hEncoding)
     {

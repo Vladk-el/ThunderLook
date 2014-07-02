@@ -94,12 +94,6 @@ void MainFrame::setLayouts(){
     widget_central = new QWidget;
     layout_main = new QHBoxLayout;
 
-    // TEST MESSAGES MODEL
-    /*MimeMessage * test = construct();
-
-    PreviewedEmail * previewedEmail = new PreviewedEmail(test);
-    */
-
     // Folders
     QStringList folders;
     folders << "Folder1" << "Folder2" << "Folder3" << "Folder4" ;
@@ -107,9 +101,11 @@ void MainFrame::setLayouts(){
     view_list_folders = new QListView;
     view_list_folders->setModel(model_folders);
     view_list_folders->setMaximumWidth(this->width()/10);
-    //QSizePolicy spLeft(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    //spLeft.setHorizontalStretch(1);
-    //view_list_folders->setSizePolicy(spLeft);
+
+
+    getEmails();
+    SqlLiteHelper * helper = new SqlLiteHelper;
+    QList<MimeMessage *> messages = helper->getAllEmails();
 
 
     // Previewed mail
@@ -118,13 +114,21 @@ void MainFrame::setLayouts(){
 
             MimeMessage * test = construct();
 
-            PreviewedEmail * pe1 = new PreviewedEmail(test);
+            /*PreviewedEmail * pe1 = new PreviewedEmail(test);
             PreviewedEmail * pe2 = new PreviewedEmail(test);
             PreviewedEmail * pe3 = new PreviewedEmail(test);
 
             layout_previewed->addWidget(pe1);
             layout_previewed->addWidget(pe2);
-            layout_previewed->addWidget(pe3);
+            layout_previewed->addWidget(pe3);*/
+
+            for(int i = 0; i < messages.length(); i++){
+                PreviewedEmail * pe1 = new PreviewedEmail(messages.at(i));
+                layout_previewed->addWidget(pe1);
+            }
+
+
+
             layout_previewed->addStretch(1);
 
         widget_previewed->setLayout(layout_previewed);
@@ -166,6 +170,13 @@ void MainFrame::setSlotsConnexions(){
 
 }
 
+void MainFrame::resizeEvent(QResizeEvent * event){
+    cout << "Size changed !!!" << endl;
+    view_list_folders->setMaximumWidth(this->width()/10);
+    widget_previewed->setMaximumWidth(3*this->width()/10);
+    widget_previewed->setMaximumWidth(6*this->width()/10);
+}
+
 QSettings * MainFrame::getSettings(){
     return global_settings;
 }
@@ -196,6 +207,51 @@ void MainFrame::slot_launch(){
         init();
 }
 
+bool MainFrame::getEmails()
+{
+    SqlLiteHelper * slh = new SqlLiteHelper();
+
+    PopClient *pop = new PopClient("pop.gmail.com",995,PopClient::SslConnection);
+    pop->setUser("oliveira93700@gmail.com");
+    pop->setPassword("Oliveira93");
+
+    if(pop->connectToHost() == true)
+        qDebug() << "connectToHost => OK";
+
+    else
+    {
+        qDebug() << "connectToHost => NOK";
+        return false;
+    }
+
+    if(pop->login() == true)
+        qDebug() << "login => OK";
+
+    else
+    {
+        qDebug() << "login => NOK";
+        return false;
+    }
+
+     QList<MimeMessage*> emails = pop->getAllEmails();
+
+    for(int i = 0 ; i < emails.size() ; i++)
+    {
+        try
+        {
+            slh->insertEmail(emails.at(i));
+            qDebug() << "Numero du message :" << i+1 << endl << emails.at(i)->getSubject() << endl;
+        }
+        catch(exception e)
+        {
+            qDebug() << "Exception" << endl;
+        }
+    }
+
+    pop->quit();
+
+    return true;
+}
 
 
 

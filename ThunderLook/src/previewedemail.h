@@ -3,6 +3,8 @@
 
 #include "../includes/smtpClient/src/mimemessage.h"
 
+#include <iostream>
+
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -23,10 +25,14 @@ class PreviewedEmail : public QWidget
         void setIHM(MimeMessage *);
 
     signals:
+        void displayDetailledEmail(MimeMessage *);
 
     public slots:
-
+        void mousePressEvent(QMouseEvent *);
     private:
+        // MimeMessage
+        //MimeMessage * message; // ==> ça plante direct Oo
+
         // Layouts
         QHBoxLayout * layout_main;
         QVBoxLayout * layout_central;

@@ -8,6 +8,9 @@
 
 #include "global.h"
 
+#include "../includes/popClient/popclient.h"
+#include "../includes/SQL/sqllitehelper.h"
+
 #include <iostream>
 
 #include <QApplication>
@@ -22,6 +25,7 @@
 #include <QStringListModel>
 #include <QStringList>
 #include <QSettings>
+#include <QResizeEvent>
 
 
 class MainFrame : public QMainWindow
@@ -42,6 +46,9 @@ class MainFrame : public QMainWindow
         void setToolBars();
         void setLayouts();
         void setSlotsConnexions();
+        bool getEmails();
+
+        void resizeEvent(QResizeEvent *);
 
         // Getters
         QSettings * getSettings();

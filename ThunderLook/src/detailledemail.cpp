@@ -1,5 +1,8 @@
 #include "detailledemail.h"
 
+using namespace std;
+
+
 DetailledEmail::DetailledEmail()
 {
     show();
@@ -7,7 +10,6 @@ DetailledEmail::DetailledEmail()
 
 DetailledEmail::DetailledEmail(MimeMessage * message){
 
-    //message = new MimeMessage(m);
     setConstraints();
     setIHM(message);
 
@@ -52,3 +54,18 @@ void DetailledEmail::setIHM(MimeMessage * message){
 
     setLayout(layout_main);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

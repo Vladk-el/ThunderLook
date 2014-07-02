@@ -22,7 +22,10 @@
 #include "mimepart.h"
 #include "mimemultipart.h"
 #include "emailaddress.h"
-#include <QList>
+#include "mimetext.h"
+#include "mimehtml.h"
+
+#include <QDebug>
 
 class MimeMessage : public QObject
 {
@@ -49,18 +52,26 @@ public:
     void addTo(EmailAddress* rcpt);
     void addCc(EmailAddress* rcpt);
     void addBcc(EmailAddress* rcpt);
+
     void setSubject(const QString & subject);
+    const QString & getSubject() const;
+
     void addPart(MimePart* part);
 
     void setHeaderEncoding(MimePart::Encoding);
 
     const EmailAddress & getSender() const;
     const QList<EmailAddress*> & getRecipients(RecipientType type = To) const;
-    const QString & getSubject() const;
     const QList<MimePart*> & getParts() const;
 
     MimePart& getContent();
     void setContent(MimePart *content);
+
+    const QString & getIndice() const;
+    void setIndice(const QString & indice);
+
+    const QString & getDate() const;
+    void setDate(const QString & date);
     /* [2] --- */
 
 
@@ -77,14 +88,14 @@ protected:
     EmailAddress* sender;
     QList<EmailAddress*> recipientsTo, recipientsCc, recipientsBcc;
     QString subject;
+    QString indice;
+    QString date;
     MimePart *content;
     bool autoMimeContentCreated;
     
     MimePart::Encoding hEncoding;
 
     /* [4] --- */
-
-
 };
 
 #endif // MIMEMESSAGE_H

@@ -1,5 +1,7 @@
 #include "previewedemail.h"
 
+using namespace std;
+
 PreviewedEmail::PreviewedEmail()
 {
     show();
@@ -7,6 +9,7 @@ PreviewedEmail::PreviewedEmail()
 
 PreviewedEmail::PreviewedEmail(MimeMessage * message)
 {
+    //this->message = message;
     setConstraints();
     setIHM(message);
     show();
@@ -16,7 +19,7 @@ PreviewedEmail::PreviewedEmail(MimeMessage * message)
 void PreviewedEmail::setConstraints(){
     setMaximumHeight(50);
     QPalette p;
-    p.setColor(QPalette::Background, Qt::yellow);
+    p.setColor(QPalette::Background, Qt::white);
     setAutoFillBackground(true);
     setPalette(p);
 }
@@ -28,7 +31,7 @@ void PreviewedEmail::setIHM(MimeMessage * message){
         label_statement = new QLabel("Statut");
 
         layout_central = new QVBoxLayout;
-            label_sender = new QLabel(message->getSender().getAddress());
+            label_sender = new QLabel(message->getSender().getName());
             label_object = new QLabel(message->getSubject());
 
             layout_central->addWidget(label_sender);
@@ -36,7 +39,7 @@ void PreviewedEmail::setIHM(MimeMessage * message){
 
 
             layout_right = new QVBoxLayout;
-                label_date = new QLabel("Date");
+                label_date = new QLabel(message->getDate());
                 label_attachement = new QLabel("Pièce jointe");
 
                 layout_right->addWidget(label_date);
@@ -49,3 +52,11 @@ void PreviewedEmail::setIHM(MimeMessage * message){
     setLayout(layout_main);
 
 }
+
+
+void PreviewedEmail::mousePressEvent(QMouseEvent * event){
+    cout << "MouseEvent detected !!!" << endl;
+}
+
+
+

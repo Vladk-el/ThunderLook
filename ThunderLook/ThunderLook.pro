@@ -14,6 +14,8 @@ SOURCES += \
     includes/smtpClient/src/mimetext.cpp \
     includes/smtpClient/src/quotedprintable.cpp \
     includes/smtpClient/src/smtpclient.cpp \
+    includes/SQL/sqllitehelper.cpp \
+    includes/popClient/popclient.cpp \
     src/sendnewemail.cpp \
     src/settings.cpp \
     src/initconfig.cpp \
@@ -36,6 +38,8 @@ HEADERS += \
     includes/smtpClient/src/quotedprintable.h \
     includes/smtpClient/src/smtpclient.h \
     includes/smtpClient/src/SmtpMime \
+    includes/SQL/sqllitehelper.h \
+    includes/popClient/popclient.h \
     src/sendnewemail.h \
     src/settings.h \
     src/initconfig.h \
@@ -43,7 +47,7 @@ HEADERS += \
     src/detailledemail.h
 
 
-QT += widgets core network
+QT += widgets core network sql
 
 RESOURCES += \
     ressources.qrc

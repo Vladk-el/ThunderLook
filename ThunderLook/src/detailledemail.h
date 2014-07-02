@@ -3,6 +3,8 @@
 
 #include "../includes/smtpClient/src/mimemessage.h"
 
+#include <iostream>
+
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QFormLayout>
