@@ -31,7 +31,7 @@ void PreviewedEmail::setIHM(MimeMessage * message){
         label_statement = new QLabel("Statut");
 
         layout_central = new QVBoxLayout;
-            label_sender = new QLabel(message->getSender().getName());
+            label_sender = new QLabel(message->getSender().getAddress());
             label_object = new QLabel(message->getSubject());
 
             layout_central->addWidget(label_sender);
