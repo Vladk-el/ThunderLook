@@ -16,6 +16,12 @@ SOURCES += \
     includes/smtpClient/src/smtpclient.cpp \
     includes/SQL/sqllitehelper.cpp \
     includes/popClient/popclient.cpp \
+    includes/Meeting/addmeeting.cpp \
+    includes/Meeting/detailmeeting.cpp \
+    includes/Meeting/meeting.cpp \
+    includes/Meeting/meetingwindow.cpp \
+    includes/Meeting/room.cpp \
+    includes/Meeting/user.cpp \
     src/sendnewemail.cpp \
     src/settings.cpp \
     src/initconfig.cpp \
@@ -41,6 +47,12 @@ HEADERS += \
     includes/smtpClient/src/SmtpMime \
     includes/SQL/sqllitehelper.h \
     includes/popClient/popclient.h \
+    includes/Meeting/addmeeting.h \
+    includes/Meeting/detailmeeting.h \
+    includes/Meeting/meeting.h \
+    includes/Meeting/meetingwindow.h \
+    includes/Meeting/room.h \
+    includes/Meeting/user.h \
     src/sendnewemail.h \
     src/settings.h \
     src/initconfig.h \

@@ -16,29 +16,29 @@ void SendNewEmail::setMainIHM(){
 
     layout_main = new QVBoxLayout;
 
-        layout_top = new QHBoxLayout;
-            button_send = new QPushButton(tr("Envoyer"));
-            button_send->setIcon(QIcon(":/data/img/send_mail/send_mail-48.png"));
+    layout_top = new QHBoxLayout;
+    button_send = new QPushButton(tr("Envoyer"));
+    button_send->setIcon(QIcon(":/data/img/send_mail/send_mail-48.png"));
 
-            layout_form = new QFormLayout;
-                button_to = new QPushButton(tr("À"));
-                button_copy = new QPushButton(tr("Cc"));
-                line_to = new QLineEdit;
-                line_copy = new QLineEdit;
-                line_subject = new QLineEdit;
+    layout_form = new QFormLayout;
+    button_to = new QPushButton(tr("À"));
+    button_copy = new QPushButton(tr("Cc"));
+    line_to = new QLineEdit;
+    line_copy = new QLineEdit;
+    line_subject = new QLineEdit;
 
-                layout_form->addRow(button_to, line_to);
-                layout_form->addRow(button_copy, line_copy);
-                layout_form->addRow(tr("Objet :"), line_subject);
+    layout_form->addRow(button_to, line_to);
+    layout_form->addRow(button_copy, line_copy);
+    layout_form->addRow(tr("Objet :"), line_subject);
 
-            layout_top->addWidget(button_send);
-            layout_top->addLayout(layout_form);
+    layout_top->addWidget(button_send);
+    layout_top->addLayout(layout_form);
 
 
-        text_content = new QTextEdit;
+    text_content = new QTextEdit;
 
-        layout_main->addLayout(layout_top);
-        layout_main->addWidget(text_content);
+    layout_main->addLayout(layout_top);
+    layout_main->addWidget(text_content);
 
     setLayout(layout_main);
 
@@ -92,10 +92,10 @@ void SendNewEmail::send(){
     MimeMessage message;
 
     message.setSender(new EmailAddress(
-                              settings->value("Account/user_email").toString(),
-                              settings->value("Account/user_name").toString()
-                              )
-                          );
+                          settings->value("Account/user_email").toString(),
+                          settings->value("Account/user_name").toString()
+                          )
+                      );
 
     message.addRecipient(new EmailAddress(line_to->text(), ""));
     if(line_copy->text() != NULL)
