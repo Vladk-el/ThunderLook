@@ -9,6 +9,7 @@
 #include "global.h"
 
 #include "../includes/popClient/popclient.h"
+#include "../includes/Meeting/MeetingWindow.h"
 #include "../includes/SQL/sqllitehelper.h"
 
 #include <iostream>
@@ -92,13 +93,6 @@ class MainFrame : public QMainWindow
         QHBoxLayout * layout_main;
         QVBoxLayout * layout_previewed;
         QVBoxLayout * layout_detailled;
-
-
-
-
-
-
-
 };
 
 #endif // MAINFRAME_H
