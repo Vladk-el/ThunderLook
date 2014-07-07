@@ -62,6 +62,11 @@ void MainFrame::setActions(){
     action_refresh_mails->setShortcut(QKeySequence("F5"));
     menu_email->addAction(action_refresh_mails);
 
+    // Action new meeting
+    action_new_meeting = new QAction(tr("&Réunion"), this);
+    action_new_meeting->setShortcut(QKeySequence("Ctrl+R"));
+    menu_email->addAction(action_new_meeting);
+
     // Action quit
     action_quit = new QAction(tr("&Quitter"), this);
     action_quit->setShortcut(QKeySequence("Ctrl+Q"));
@@ -83,6 +88,7 @@ void MainFrame::setToolBars(){
     //toolbar_top->addAction(action_quit);
     toolbar_top->addAction(action_new_mail);
     toolbar_top->addAction(action_refresh_mails);
+    toolbar_top->addAction(action_new_meeting);
 
 
     //toolbar_top->setOrientation(Qt::Vertical);
@@ -166,6 +172,7 @@ void MainFrame::setSlotsConnexions(){
     connect(action_quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(action_new_mail, SIGNAL(triggered()), this, SLOT(slot_new_mail()));
     connect(action_refresh_mails, SIGNAL(triggered()), this, SLOT(slot_refresh_mails()));
+    connect(action_new_meeting, SIGNAL(triggered()), this, SLOT(slot_new_meeting()));
     connect(action_configure_account, SIGNAL(triggered()), this, SLOT(slot_configure_account()));
 
 }
@@ -193,6 +200,10 @@ void MainFrame::slot_new_mail(){
 
 void MainFrame::slot_refresh_mails(){
     cout << "Slot refresh mail" << endl;
+}
+
+void MainFrame::slot_new_meeting(){
+    cout << "Slot new meeting" << endl;
 }
 
 void MainFrame::slot_configure_account(){

@@ -59,6 +59,7 @@ class MainFrame : public QMainWindow
     public slots:
         void slot_new_mail();
         void slot_refresh_mails();
+        void slot_new_meeting();
         void slot_configure_account();
         void slot_launch();
 
@@ -74,6 +75,7 @@ class MainFrame : public QMainWindow
         // Actions
         QAction * action_quit;
         QAction * action_new_mail;
+        QAction * action_new_meeting;
         QAction * action_refresh_mails;
         QAction * action_configure_account;
 
