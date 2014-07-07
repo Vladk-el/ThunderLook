@@ -14,6 +14,8 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql>
 
+#include "../../src/settings.h"
+#include "../smtpClient/src/smtpclient.h"
 #include "user.h"
 #include "room.h"
 
@@ -37,6 +39,7 @@ private:
 
     QComboBox *meetings_rooms;
     QComboBox *meetings_users;
+    QComboBox *combobox_colors;
 
     QFormLayout *meeting_details_data;
     QFormLayout *meeting_form_duration;
@@ -56,15 +59,15 @@ private:
     QStandardItemModel *modelTargetUsers;
     QStandardItemModel *modelRooms;
 
-
     QCheckBox *checkbox_compulsory;
 
-    QComboBox *combobox_colors;
-
     QSqlDatabase db;
+    QSettings *global_settings;
+    SmtpClient *smtp;
 
     void moveItemToTarget(QListView  *source, QListView  *target);
     void moveItemToSource(QListView  *source, QListView  *target);
+    void sendEmail(int id_meeting);
 
 public slots:
     void addUser();

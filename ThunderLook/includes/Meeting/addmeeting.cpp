@@ -247,6 +247,7 @@ void AddMeeting::add()
         }
     }
 
+    sendEmail(3);
     emit notifyRefreshList();
     this->quit();
 }
@@ -277,6 +278,51 @@ void AddMeeting::moveItemToTarget(QListView  *source, QListView  *target)
             currentIndexTarget++;
         }
     }
+}
+
+void AddMeeting::sendEmail(int id_meeting)
+{
+    global_settings = new QSettings("../../../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
+
+    if(global_settings->value("Send/smtp_server").toInt() == 1)
+        smtp = new SmtpClient(global_settings->value("Send/smtp_server").toString(), global_settings->value("Send/smtp_port").toInt(), SmtpClient::SslConnection);
+    else
+        smtp = new SmtpClient(global_settings->value("Send/smtp_server").toString(), global_settings->value("Send/smtp_port").toInt());
+
+    smtp->setUser(global_settings->value("Send/smtp_user").toString());
+    smtp->setPassword(global_settings->value("Send/smtp_password").toString());
+
+    QSqlQuery query;
+
+    query.prepare("SELECT * FROM Users,UsersMeeting where id_meeting = :id_meeting AND UsersMeeting.id_user = Users.id");
+    query.bindValue(":id_meeting", id_meeting);
+    query.exec();
+    QSqlRecord rec = query.record();
+
+    while(query.next())
+    {
+        MimeMessage message;
+
+        message.setSender(new EmailAddress(
+                              global_settings->value("Account/user_email").toString(),
+                              global_settings->value("Account/user_name").toString()
+                              ));
+
+        message.addRecipient(new EmailAddress(query.value(rec.indexOf("address")).toString(), ""));
+        message.setSubject("Sujet du mail");
+
+        MimeText * text = new MimeText;
+        text->setText("text_content->toPlainText()");
+
+        message.addPart(text);
+
+        smtp->connectToHost();
+        smtp->login();
+        smtp->sendMail(message);
+    }
+
+    smtp->quit();
+    close();
 }
 
 void AddMeeting::moveItemToSource(QListView  *source, QListView  *target)
