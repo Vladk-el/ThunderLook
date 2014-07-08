@@ -76,9 +76,6 @@ void MainFrame::setActions(){
     action_configure_account = new QAction(tr("Paramètres"), this);
     action_configure_account->setShortcut(QKeySequence("Ctrl+P"));
     menu_account->addAction(action_configure_account);
-
-
-
 }
 
 void MainFrame::setToolBars(){
@@ -124,19 +121,39 @@ void MainFrame::setLayouts(){
     // Previewed mail
     /*
     widget_previewed = new QWidget;
-        layout_previewed = new QVBoxLayout;
+    layout_previewed = new QVBoxLayout;
 
-            MimeMessage * test = construct();
+    MimeMessage * test = construct();
 
+<<<<<<< HEAD
             for(int i = 0; i < messages.length(); i++){
                 PreviewedEmail * pe1 = new PreviewedEmail(messages.at(i), i);
                 layout_previewed->addWidget(pe1);
             }
 
             layout_previewed->addStretch(1);
+=======
+    /*PreviewedEmail * pe1 = new PreviewedEmail(test);
+            PreviewedEmail * pe2 = new PreviewedEmail(test);
+            PreviewedEmail * pe3 = new PreviewedEmail(test);
 
-        widget_previewed->setLayout(layout_previewed);
+            layout_previewed->addWidget(pe1);
+            layout_previewed->addWidget(pe2);
+            layout_previewed->addWidget(pe3);*/
 
+    for(int i = 0; i < messages.length(); i++){
+        PreviewedEmail * pe1 = new PreviewedEmail(messages.at(i));
+        layout_previewed->addWidget(pe1);
+    }
+
+
+
+    layout_previewed->addStretch(1);
+>>>>>>> 923b475d1aac6d19eb88346b59633a1ce2af14a5
+
+    widget_previewed->setLayout(layout_previewed);
+
+<<<<<<< HEAD
         QPalette p;
         p.setColor(QPalette::Background, Qt::white);
         widget_previewed->setAutoFillBackground(true);
@@ -144,19 +161,32 @@ void MainFrame::setLayouts(){
         widget_previewed->setMaximumWidth(4*this->width()/10);
         widget_previewed->setMinimumWidth(3*this->width()/10);
     */
+=======
+    QPalette p;
+    p.setColor(QPalette::Background, Qt::white);
+    widget_previewed->setAutoFillBackground(true);
+    widget_previewed->setPalette(p);
+    widget_previewed->setMaximumWidth(3*this->width()/10);
+
+>>>>>>> 923b475d1aac6d19eb88346b59633a1ce2af14a5
 
     // Detailled mail
 
     MimeMessage * test = construct();
 
     widget_detailled = new QWidget;
-        layout_detailled = new QVBoxLayout;
-            DetailledEmail * detailledEmail = new DetailledEmail(test);
+    layout_detailled = new QVBoxLayout;
+    DetailledEmail * detailledEmail = new DetailledEmail(test);
 
-            layout_detailled->addWidget(detailledEmail);
+    layout_detailled->addWidget(detailledEmail);
 
+<<<<<<< HEAD
         widget_detailled->setLayout(layout_detailled);
         widget_previewed->setMaximumWidth(5*this->width()/10);
+=======
+    widget_detailled->setLayout(layout_detailled);
+    widget_previewed->setMaximumWidth(6*this->width()/10);
+>>>>>>> 923b475d1aac6d19eb88346b59633a1ce2af14a5
 
 
 
@@ -205,7 +235,8 @@ void MainFrame::slot_refresh_mails(){
 }
 
 void MainFrame::slot_new_meeting(){
-    cout << "Slot new meeting" << endl;
+    MeetingWindow *meeting = new MeetingWindow;
+    meeting->show();
 }
 
 void MainFrame::slot_configure_account(){
@@ -250,7 +281,7 @@ bool MainFrame::getEmails()
         return false;
     }
 
-     QList<MimeMessage*> emails = pop->getAllEmails();
+    QList<MimeMessage*> emails = pop->getAllEmails();
 
     for(int i = 0 ; i < emails.size() ; i++)
     {
@@ -269,23 +300,3 @@ bool MainFrame::getEmails()
 
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

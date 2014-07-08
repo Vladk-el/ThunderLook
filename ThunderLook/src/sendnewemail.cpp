@@ -13,7 +13,6 @@ void SendNewEmail::setMainIHM(){
     setWindowTitle(tr("Nouveau message"));
     settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
 
-
     layout_main = new QVBoxLayout;
 
     layout_top = new QHBoxLayout;
@@ -81,7 +80,7 @@ void SendNewEmail::send(){
 
     //SmtpClient * smtp = NULL;
 
-    if(settings->value("Send/smtp_server").toInt() == 1)
+    if(settings->value("Send/smtp_security").toInt() == 1)
         smtp = new SmtpClient(settings->value("Send/smtp_server").toString(), settings->value("Send/smtp_port").toInt(), SmtpClient::SslConnection);
     else
         smtp = new SmtpClient(settings->value("Send/smtp_server").toString(), settings->value("Send/smtp_port").toInt());
@@ -116,8 +115,6 @@ void SendNewEmail::send(){
     close();
 }
 
-
-
 void SendNewEmail::verifyLineTo(){
     verifyLineAddress(line_to);
 }
@@ -125,10 +122,3 @@ void SendNewEmail::verifyLineTo(){
 void SendNewEmail::verifyLineCopy(){
     verifyLineAddress(line_copy);
 }
-
-
-
-
-
-
-

@@ -20,9 +20,9 @@ PopClient::PopClient(const QString &host, int port, ConnectionType connectionTyp
     this->host = host;
     this->port = port;
 
-    this->connectionTimeout = 5000;
-    this->responseTimeout = 5000;
-    this->sendMessageTimeout = 70000;
+    this->connectionTimeout = 50000000;
+    this->responseTimeout = 9999999999999999999999999999;
+    this->sendMessageTimeout = 70000000000;
 
     this->nbTotalEmail = 0;
 
@@ -85,6 +85,14 @@ MimeMessage * PopClient::getEmail(int id)
 
         QStringList listLineEmail = responseText.split("\r\n");
 
+        if(listLineEmail.length() < 20)
+        {
+            sendMessage("RETR " + indice);
+            waitForResponse();
+
+            listLineEmail = responseText.split("\r\n");
+        }
+
         for(int i = 0 ; i < listLineEmail.length() ; i++)
         {
             if(listLineEmail[i].startsWith("To:"))
@@ -117,7 +125,7 @@ MimeMessage * PopClient::getEmail(int id)
                         name = listTo[i].mid(0,first);
 
                         int last = listTo[i].indexOf(">");
-                        listTo[i] = listTo[i].mid(first+1,(last-first) - 1);
+                        listTo[i] = listTo[i].mid(first+1,(last-first) - 2);
                     }
 
                     email->addRecipient(new EmailAddress(listTo[i],name));
@@ -358,10 +366,14 @@ void PopClient::waitForResponse()
 
         while (socket->canReadLine())
         {
-            response = socket->readLine();
-            responseText.append(response);
+            QByteArray array = socket->readAll();
 
-            responseCode = response[0];
+            for(int i = 0 ; i < array.length() ; i++)
+                responseText.append(array.at(i));
+            //response = socket->readLine();
+            //responseText.append(response);
+
+            responseCode = responseText[0];
 
             if(line == 0)
             {

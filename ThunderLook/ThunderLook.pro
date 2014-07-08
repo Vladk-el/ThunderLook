@@ -45,7 +45,6 @@ HEADERS += \
     includes/smtpClient/src/mimetext.h \
     includes/smtpClient/src/quotedprintable.h \
     includes/smtpClient/src/smtpclient.h \
-    includes/smtpClient/src/SmtpMime \
     includes/SQL/sqllitehelper.h \
     includes/popClient/popclient.h \
     includes/Meeting/addmeeting.h \
@@ -60,14 +59,18 @@ HEADERS += \
     src/previewedemail.h \
     src/detailledemail.h \
     src/custommessagelist.h \
+<<<<<<< HEAD
     src/widgetpreviewed.h
 
+=======
+    includes/smtpClient/src/SmtpMime
+>>>>>>> 923b475d1aac6d19eb88346b59633a1ce2af14a5
 
 QT += widgets core network sql
+
 
 RESOURCES += \
     ressources.qrc
 
 OTHER_FILES += \
     data/settings/settings.ini
-
