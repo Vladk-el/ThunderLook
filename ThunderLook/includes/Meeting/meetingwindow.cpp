@@ -14,11 +14,23 @@ MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
     this->setFixedWidth(1065);
     this->setFixedHeight(630);
 
+    /*QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL","188.165.125.160");
+    db.setPort(2981);
+    db.setDatabaseName( "thunderlook" );
+    db.setUserName( "esgi" );
+    db.setPassword( "esgi" );*/
+
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("meetings.db");
     if (!db.open())
     {
-        qDebug() << "Impossible de se connecter à la base de données." << endl;
+        QString error(db.lastError().text());
+
+        for(int i = 0 ; i < QSqlDatabase::drivers().length() ; i++)
+            qDebug() << QSqlDatabase::drivers().at(i);
+
+        //QSqlError error = QSqlDatabase::lastError();
+        qDebug() << db.lastError().text() << "Impossible de se connecter à la base de données." << endl;
         return;
     }
 
@@ -28,8 +40,8 @@ MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
     model = new QStandardItemModel();
 
     view = new QTableView();
-    view->setEditTriggers(QAbstractItemView::NoEditTriggers); // pas d'édition
-    view->setFocusPolicy(Qt::NoFocus); // pas de sélection bleue
+    view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    view->setFocusPolicy(Qt::NoFocus);
     view->setSelectionMode(QAbstractItemView::SingleSelection);
 
     calendar = new QCalendarWidget();

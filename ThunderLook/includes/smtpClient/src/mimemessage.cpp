@@ -83,7 +83,6 @@ const QString & MimeMessage::getSubject() const
     return subject;
 }
 
-
 const QString & MimeMessage::getIndice() const
 {
     return this->indice;

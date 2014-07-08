@@ -67,7 +67,7 @@ private:
 
     void moveItemToTarget(QListView  *source, QListView  *target);
     void moveItemToSource(QListView  *source, QListView  *target);
-    void sendEmail(int id_meeting);
+    void sendEmail(int id_meeting,QString date);
 
 public slots:
     void addUser();

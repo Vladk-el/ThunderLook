@@ -1,5 +1,5 @@
 
-#include "includes/smtpClient/src/SmtpMime"
+#include "../includes/smtpClient/src/SmtpMime"
 
 int smtp_test()
 {
