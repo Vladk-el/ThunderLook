@@ -118,58 +118,6 @@ void MainFrame::setLayouts(){
 
     connect(widget_previewed, SIGNAL(sayMyChildrenSelectedId(int)), this, SLOT(slot_get_email_indice(int)));
 
-    // Previewed mail
-    /*
-    widget_previewed = new QWidget;
-    layout_previewed = new QVBoxLayout;
-
-    MimeMessage * test = construct();
-
-<<<<<<< HEAD
-            for(int i = 0; i < messages.length(); i++){
-                PreviewedEmail * pe1 = new PreviewedEmail(messages.at(i), i);
-                layout_previewed->addWidget(pe1);
-            }
-
-            layout_previewed->addStretch(1);
-=======
-    /*PreviewedEmail * pe1 = new PreviewedEmail(test);
-            PreviewedEmail * pe2 = new PreviewedEmail(test);
-            PreviewedEmail * pe3 = new PreviewedEmail(test);
-
-            layout_previewed->addWidget(pe1);
-            layout_previewed->addWidget(pe2);
-            layout_previewed->addWidget(pe3);*/
-
-    for(int i = 0; i < messages.length(); i++){
-        PreviewedEmail * pe1 = new PreviewedEmail(messages.at(i));
-        layout_previewed->addWidget(pe1);
-    }
-
-
-
-    layout_previewed->addStretch(1);
->>>>>>> 923b475d1aac6d19eb88346b59633a1ce2af14a5
-
-    widget_previewed->setLayout(layout_previewed);
-
-<<<<<<< HEAD
-        QPalette p;
-        p.setColor(QPalette::Background, Qt::white);
-        widget_previewed->setAutoFillBackground(true);
-        widget_previewed->setPalette(p);
-        widget_previewed->setMaximumWidth(4*this->width()/10);
-        widget_previewed->setMinimumWidth(3*this->width()/10);
-    */
-=======
-    QPalette p;
-    p.setColor(QPalette::Background, Qt::white);
-    widget_previewed->setAutoFillBackground(true);
-    widget_previewed->setPalette(p);
-    widget_previewed->setMaximumWidth(3*this->width()/10);
-
->>>>>>> 923b475d1aac6d19eb88346b59633a1ce2af14a5
-
     // Detailled mail
 
     MimeMessage * test = construct();
@@ -180,14 +128,8 @@ void MainFrame::setLayouts(){
 
     layout_detailled->addWidget(detailledEmail);
 
-<<<<<<< HEAD
         widget_detailled->setLayout(layout_detailled);
         widget_previewed->setMaximumWidth(5*this->width()/10);
-=======
-    widget_detailled->setLayout(layout_detailled);
-    widget_previewed->setMaximumWidth(6*this->width()/10);
->>>>>>> 923b475d1aac6d19eb88346b59633a1ce2af14a5
-
 
 
     layout_main->addWidget(view_list_folders);

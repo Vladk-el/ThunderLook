@@ -59,12 +59,8 @@ HEADERS += \
     src/previewedemail.h \
     src/detailledemail.h \
     src/custommessagelist.h \
-<<<<<<< HEAD
-    src/widgetpreviewed.h
-
-=======
+    src/widgetpreviewed.h \
     includes/smtpClient/src/SmtpMime
->>>>>>> 923b475d1aac6d19eb88346b59633a1ce2af14a5
 
 QT += widgets core network sql
 
