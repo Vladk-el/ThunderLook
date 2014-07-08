@@ -109,31 +109,29 @@ void MainFrame::setLayouts(){
     view_list_folders->setMaximumWidth(this->width()/10);
 
 
-    getEmails();
+    //getEmails();
     SqlLiteHelper * helper = new SqlLiteHelper;
-    QList<MimeMessage *> messages = helper->getAllEmails();
+    messages = helper->getAllEmails();
 
+
+    widget_previewed = new WidgetPreviewed(messages);
+
+    widget_previewed->setMaximumWidth(4*this->width()/10);
+    widget_previewed->setMinimumWidth(3*this->width()/10);
+
+    connect(widget_previewed, SIGNAL(sayMyChildrenSelectedId(int)), this, SLOT(slot_get_email_indice(int)));
 
     // Previewed mail
+    /*
     widget_previewed = new QWidget;
         layout_previewed = new QVBoxLayout;
 
             MimeMessage * test = construct();
 
-            /*PreviewedEmail * pe1 = new PreviewedEmail(test);
-            PreviewedEmail * pe2 = new PreviewedEmail(test);
-            PreviewedEmail * pe3 = new PreviewedEmail(test);
-
-            layout_previewed->addWidget(pe1);
-            layout_previewed->addWidget(pe2);
-            layout_previewed->addWidget(pe3);*/
-
             for(int i = 0; i < messages.length(); i++){
-                PreviewedEmail * pe1 = new PreviewedEmail(messages.at(i));
+                PreviewedEmail * pe1 = new PreviewedEmail(messages.at(i), i);
                 layout_previewed->addWidget(pe1);
             }
-
-
 
             layout_previewed->addStretch(1);
 
@@ -143,10 +141,14 @@ void MainFrame::setLayouts(){
         p.setColor(QPalette::Background, Qt::white);
         widget_previewed->setAutoFillBackground(true);
         widget_previewed->setPalette(p);
-        widget_previewed->setMaximumWidth(3*this->width()/10);
-
+        widget_previewed->setMaximumWidth(4*this->width()/10);
+        widget_previewed->setMinimumWidth(3*this->width()/10);
+    */
 
     // Detailled mail
+
+    MimeMessage * test = construct();
+
     widget_detailled = new QWidget;
         layout_detailled = new QVBoxLayout;
             DetailledEmail * detailledEmail = new DetailledEmail(test);
@@ -154,7 +156,7 @@ void MainFrame::setLayouts(){
             layout_detailled->addWidget(detailledEmail);
 
         widget_detailled->setLayout(layout_detailled);
-        widget_previewed->setMaximumWidth(6*this->width()/10);
+        widget_previewed->setMaximumWidth(5*this->width()/10);
 
 
 
@@ -216,6 +218,10 @@ void MainFrame::slot_launch(){
     global_settings->sync();
     if(global_settings->value("account_configured").toBool())
         init();
+}
+
+void MainFrame::slot_get_email_indice(int indice){
+    cout << "indice : " << indice << endl;
 }
 
 bool MainFrame::getEmails()

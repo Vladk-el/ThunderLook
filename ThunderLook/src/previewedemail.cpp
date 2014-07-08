@@ -15,6 +15,15 @@ PreviewedEmail::PreviewedEmail(MimeMessage * message)
     show();
 }
 
+PreviewedEmail::PreviewedEmail(MimeMessage * message, int indice)
+{
+    this->indice = indice;
+    setConstraints();
+    setIHM(message);
+    show();
+}
+
+
 
 void PreviewedEmail::setConstraints(){
     setMaximumHeight(50);
@@ -37,13 +46,12 @@ void PreviewedEmail::setIHM(MimeMessage * message){
             layout_central->addWidget(label_sender);
             layout_central->addWidget(label_object);
 
+        layout_right = new QVBoxLayout;
+            label_date = new QLabel(message->getDate());
+            label_attachement = new QLabel("Pièce jointe");
 
-            layout_right = new QVBoxLayout;
-                label_date = new QLabel(message->getDate());
-                label_attachement = new QLabel("Pièce jointe");
-
-                layout_right->addWidget(label_date);
-                layout_right->addWidget(label_attachement);
+            layout_right->addWidget(label_date);
+            layout_right->addWidget(label_attachement);
 
         layout_main->addWidget(label_statement);
         layout_main->addLayout(layout_central);
@@ -55,7 +63,10 @@ void PreviewedEmail::setIHM(MimeMessage * message){
 
 
 void PreviewedEmail::mousePressEvent(QMouseEvent * event){
-    cout << "MouseEvent detected !!!" << endl;
+    /*cout << "MouseEvent detected !!!" << endl;
+    cout << "Indice : " << indice << endl;*/
+
+    emit sayYourId(this->indice);
 }
 
 

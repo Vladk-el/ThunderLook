@@ -5,6 +5,7 @@
 #include "settings.h"
 #include "initconfig.h"
 #include "previewedemail.h"
+#include "widgetpreviewed.h"
 
 #include "global.h"
 
@@ -62,6 +63,7 @@ class MainFrame : public QMainWindow
         void slot_new_meeting();
         void slot_configure_account();
         void slot_launch();
+        void slot_get_email_indice(int);
 
     private:
         // QSettings
@@ -88,13 +90,16 @@ class MainFrame : public QMainWindow
 
         // Widgets
         QWidget * widget_central;
-        QWidget * widget_previewed;
+        WidgetPreviewed * widget_previewed;
         QWidget * widget_detailled;
 
         // Layouts
         QHBoxLayout * layout_main;
-        QVBoxLayout * layout_previewed;
         QVBoxLayout * layout_detailled;
+
+        // QList<MimeMessage *>
+        QList<MimeMessage *> messages;
+
 };
 
 #endif // MAINFRAME_H

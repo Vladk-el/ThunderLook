@@ -27,7 +27,8 @@ SOURCES += \
     src/initconfig.cpp \
     src/previewedemail.cpp \
     src/detailledemail.cpp \
-    src/custommessagelist.cpp
+    src/custommessagelist.cpp \
+    src/widgetpreviewed.cpp
 
 HEADERS += \
     src/global.h \
@@ -58,7 +59,8 @@ HEADERS += \
     src/initconfig.h \
     src/previewedemail.h \
     src/detailledemail.h \
-    src/custommessagelist.h
+    src/custommessagelist.h \
+    src/widgetpreviewed.h
 
 
 QT += widgets core network sql

@@ -18,6 +18,7 @@ class PreviewedEmail : public QWidget
     public:
         PreviewedEmail();
         PreviewedEmail(MimeMessage *);
+        PreviewedEmail(MimeMessage *, int);
 
         //virtual QStandardItem * clone(MimeMessage *) const;
 
@@ -25,7 +26,7 @@ class PreviewedEmail : public QWidget
         void setIHM(MimeMessage *);
 
     signals:
-        void displayDetailledEmail(MimeMessage *);
+        void sayYourId(int);
 
     public slots:
         void mousePressEvent(QMouseEvent *);
@@ -44,6 +45,9 @@ class PreviewedEmail : public QWidget
         QLabel * label_object;
         QLabel * label_date;
         QLabel * label_attachement;
+
+        // Indice
+        int indice;
 
 };
 
