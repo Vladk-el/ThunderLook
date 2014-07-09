@@ -16,6 +16,7 @@
 #include <QListView>
 #include <QtSql>
 
+#include "../smtpClient/src/smtpclient.h"
 #include "meeting.h"
 #include "detailmeeting.h"
 
@@ -50,6 +51,7 @@ private:
     QListView *view_list_folders;
     QSqlDatabase db;
     int id_account;
+    QSettings *global_settings;
 };
 
 #endif // MEETINGWINDOW_H

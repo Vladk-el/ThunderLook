@@ -21,7 +21,7 @@ PopClient::PopClient(const QString &host, int port, ConnectionType connectionTyp
     this->port = port;
 
     this->connectionTimeout = 50000000;
-    this->responseTimeout = 9999999999999999999999999999;
+    this->responseTimeout = 999999999;
     this->sendMessageTimeout = 70000000000;
 
     this->nbTotalEmail = 0;

@@ -64,7 +64,6 @@ HEADERS += \
 
 QT += widgets core network sql
 
-
 RESOURCES += \
     ressources.qrc
 

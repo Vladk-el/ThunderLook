@@ -10,6 +10,11 @@ SqlLiteHelper::SqlLiteHelper(QObject *parent) :
 
 }
 
+bool SqlLiteHelper::insertUser(QString addr)
+{
+
+}
+
 QList<MimeMessage *> SqlLiteHelper::getAllEmails()
 {
     QList<MimeMessage *> emails;
@@ -107,6 +112,8 @@ bool SqlLiteHelper::insertEmail(MimeMessage * mail)
         query.bindValue(":date",mail->getDate());
         query.bindValue(":content", mail->getContent().toString());
         query.exec();
+
+        QString test(query.lastError().text());
 
         // INSERT SENDER
         query.prepare("INSERT INTO Sender (id_email, address_sender, name_sender) "

@@ -51,10 +51,25 @@ DetailMeeting::DetailMeeting(int _meeting_id, QWidget *parent) : QDialog(parent)
     QTime time(0,0,0);
     meeting_duration->setTime(time.addSecs(req->value(rec.indexOf("duration")).toInt()*60));
 
-    btn_action = new QPushButton("Ok");
+    btn_action = new QPushButton("Mettre à jour");
     btn_cancel = new QPushButton("Annuler");
     btn_del = new QPushButton("Supprimer cette réunion");
-    btn_del->setToolTip("Seul l'organisateur peut supprimer la réunion.");
+
+    global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
+
+    QSqlQuery *reqOrganizer = new QSqlQuery();
+    reqOrganizer->prepare("SELECT Users.address FROM Meeting,Users WHERE Meeting.id = :meeting_id AND Users.id = Meeting.organizer");
+    reqOrganizer->bindValue(":meeting_id", meeting_id);
+    reqOrganizer->exec();
+    QSqlRecord recOrganizer = reqOrganizer->record();
+    reqOrganizer->next();
+
+    // Enable QPushButton "Supprimer à jour" AND "Mettre à jour"
+    if(reqOrganizer->value(recOrganizer.indexOf("address")).toString() != global_settings->value("Send/smtp_user").toString())
+    {
+        btn_del->setEnabled(false);
+        btn_action->setEnabled(false);
+    }
 
     cb_organizer = new QComboBox();
     cb_organizer->setEnabled(false);
