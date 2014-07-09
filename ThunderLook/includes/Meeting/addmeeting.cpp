@@ -15,7 +15,8 @@ AddMeeting::AddMeeting(QWidget *parent, int account_id) : QDialog(parent)
     setWindowTitle("Planifier une réunion");
 
     /*db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName( "http://188.165.125.160:2980" );
+    db.setHostName( "188.165.125.160" );
+    db.setPort(2980);
     db.setDatabaseName( "thunderlook" );
     db.setUserName( "esgi" );
     db.setPassword( "esgi" );*/
@@ -27,6 +28,11 @@ AddMeeting::AddMeeting(QWidget *parent, int account_id) : QDialog(parent)
         qDebug() << "Impossible de se connecter à la base de données." << endl;
         return;
     }
+
+    QStringList list = QSqlDatabase::drivers();
+    //qDebug() << "Test :" << QSqlDatabase:: << endl;
+    for(int i = 0 ; i < list.length() ; i++)
+        qDebug() << list.at(i);
 
     id = account_id;
 

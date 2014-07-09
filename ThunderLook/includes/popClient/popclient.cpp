@@ -85,7 +85,7 @@ MimeMessage * PopClient::getEmail(int id)
 
         QStringList listLineEmail = responseText.split("\r\n");
 
-        if(listLineEmail.length() < 20)
+        while(listLineEmail.length() < 20)
         {
             sendMessage("RETR " + indice);
             waitForResponse();
