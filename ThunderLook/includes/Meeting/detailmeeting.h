@@ -31,6 +31,7 @@ public:
 private:
     int user_id;
     int meeting_id;
+    SmtpClient *smtp;
 
     QLabel *lb_label;
 
@@ -52,10 +53,12 @@ private:
     QStandardItemModel *model_users;
 
     QSettings *global_settings;
+    QSqlDatabase db;
 
 private slots:
     void quit();
     void deleteMeeting();
+    void sendEmailDeleteMeeting(int id_meeting,QString date);
 
 signals:
     void notifyRefreshList();

@@ -28,6 +28,7 @@ EmailAddress::EmailAddress(const QString & address, const QString & name)
 
 EmailAddress::~EmailAddress()
 {
+
 }
 
 /* [1] --- */

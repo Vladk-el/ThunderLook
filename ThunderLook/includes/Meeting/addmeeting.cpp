@@ -14,15 +14,16 @@ AddMeeting::AddMeeting(QWidget *parent, int account_id) : QDialog(parent)
     setFixedWidth(750);
     setWindowTitle("Planifier une réunion");
 
-    /*db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName( "188.165.125.160" );
-    db.setPort(2980);
-    db.setDatabaseName( "thunderlook" );
-    db.setUserName( "esgi" );
-    db.setPassword( "esgi" );*/
+    db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("188.165.125.160");
+    db.setPort(2981);
+    db.setDatabaseName("thunderlook");
+    db.setUserName("esgi");
+    db.setPassword("esgi");
 
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("database.db");
+    //db = QSqlDatabase::addDatabase("QSQLITE");
+    //db.setDatabaseName("database.db");
+
     if (!db.open())
     {
         qDebug() << "Impossible de se connecter à la base de données." << endl;
@@ -330,6 +331,8 @@ void AddMeeting::moveItemToTarget(QListView  *source, QListView  *target)
     }
 }
 
+
+
 void AddMeeting::sendEmail(int id_meeting,QString date)
 {
     global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
@@ -362,7 +365,7 @@ void AddMeeting::sendEmail(int id_meeting,QString date)
 
         QString email(query.value(rec.indexOf("address")).toString());
         message.addRecipient(new EmailAddress(query.value(rec.indexOf("address")).toString(), ""));
-        message.setSubject("Sujet du mail");
+        message.setSubject("Participation à une reunion");
 
         MimeHtml * text = new MimeHtml;
         QString link("http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=1");
