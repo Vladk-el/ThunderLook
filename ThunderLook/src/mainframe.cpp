@@ -124,7 +124,7 @@ void MainFrame::setLayouts(){
 
     widget_detailled = new QWidget;
     layout_detailled = new QVBoxLayout;
-    DetailledEmail * detailledEmail = new DetailledEmail(test);
+    detailledEmail = new DetailledEmail(test);
 
     layout_detailled->addWidget(detailledEmail);
 

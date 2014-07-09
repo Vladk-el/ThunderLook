@@ -6,6 +6,7 @@
 #include "initconfig.h"
 #include "previewedemail.h"
 #include "widgetpreviewed.h"
+#include "detailledemail.h"
 
 #include "global.h"
 
@@ -99,6 +100,9 @@ class MainFrame : public QMainWindow
 
         // QList<MimeMessage *>
         QList<MimeMessage *> messages;
+
+        // DetailledEmail
+        DetailledEmail * detailledEmail;
 
 };
 

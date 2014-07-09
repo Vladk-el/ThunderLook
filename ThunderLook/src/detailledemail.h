@@ -23,6 +23,8 @@ class DetailledEmail : public QWidget
         void setConstraints();
         void setIHM(MimeMessage *);
 
+        void update(MimeMessage *);
+
     signals:
 
     public slots:

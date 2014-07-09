@@ -55,6 +55,15 @@ void DetailledEmail::setIHM(MimeMessage * message){
     setLayout(layout_main);
 }
 
+void DetailledEmail::update(MimeMessage * message){
+    label_object->setText(message->getSubject());
+    label_sender->setText(message->getSender().getAddress());
+    label_date->setText(message->getDate());
+    label_to->setText(message->getRecipients().at(0)->getName());
+    label_attachement->setText("label attachement");
+    label_corps->setText(message->getContent().toString());
+}
+
 
 
 
