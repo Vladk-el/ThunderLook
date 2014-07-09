@@ -117,11 +117,16 @@ void MainFrame::setLayouts(){
 
     // Detailled mail
 
-    MimeMessage * test = construct();
-
     widget_detailled = new QWidget;
     layout_detailled = new QVBoxLayout;
-    detailledEmail = new DetailledEmail(test);
+
+    if(messages.size() > 0){
+        detailledEmail = new DetailledEmail(messages.at(0));
+    }else{
+        MimeMessage * test = construct();
+        detailledEmail = new DetailledEmail();
+    }
+
 
     layout_detailled->addWidget(detailledEmail);
 
@@ -192,13 +197,16 @@ void MainFrame::slot_launch(){
 
 void MainFrame::slot_get_email_indice(int indice){
     cout << "indice : " << indice << endl;
+    cout << "messages.size() : " << messages.size() << endl;
+
+    detailledEmail->update(messages.at(indice));
 }
 
 bool MainFrame::getEmails()
 {
     SqlLiteHelper * slh = new SqlLiteHelper();
 
-    PopClient *pop = new PopClient("pop.gmail.com",995,PopClient::SslConnection);
+    PopClient * pop = new PopClient("pop.gmail.com",995,PopClient::SslConnection);
     pop->setUser("oliveira93700@gmail.com");
     pop->setPassword("Oliveira93");
 

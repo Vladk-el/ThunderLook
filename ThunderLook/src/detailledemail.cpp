@@ -33,7 +33,7 @@ void DetailledEmail::setIHM(MimeMessage * message){
                 label_object->setStyleSheet(style_label);
             label_sender = new QLabel(message->getSender().getAddress());
                 label_sender->setStyleSheet(style_label);
-            label_date = new QLabel("label_date");
+            label_date = new QLabel(message->getDate());
                 label_date->setStyleSheet(style_label);
             label_to = new QLabel("label_to");
                 label_to->setStyleSheet(style_label);
@@ -46,7 +46,7 @@ void DetailledEmail::setIHM(MimeMessage * message){
             layout_top->addRow(tr("Destinataire(s)"), label_to);
             layout_top->addRow(tr("Pièce(s) jointe(s)"), label_attachement);
 
-        label_corps = new QTextEdit("label_corps");
+        label_corps = new QTextEdit(message->getContent().toString());
             label_corps->setEnabled(false);
 
         layout_main->addLayout(layout_top);
@@ -59,7 +59,11 @@ void DetailledEmail::update(MimeMessage * message){
     label_object->setText(message->getSubject());
     label_sender->setText(message->getSender().getAddress());
     label_date->setText(message->getDate());
-    label_to->setText(message->getRecipients().at(0)->getName());
+
+    if(message->getRecipients().size() > 0){
+        label_to->setText(message->getRecipients().at(0)->getName());
+    }
+
     label_attachement->setText("label attachement");
     label_corps->setText(message->getContent().toString());
 }

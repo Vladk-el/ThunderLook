@@ -59,15 +59,55 @@ void PreviewedEmail::setIHM(MimeMessage * message){
 
     setLayout(layout_main);
 
+    isSelected = false;
 }
 
 
 void PreviewedEmail::mousePressEvent(QMouseEvent * event){
-    /*cout << "MouseEvent detected !!!" << endl;
-    cout << "Indice : " << indice << endl;*/
-
     emit sayYourId(this->indice);
+
+    QPalette p;
+    p.setColor(QPalette::Background, Qt::blue);
+    setAutoFillBackground(true);
+    setPalette(p);
+
+    isSelected = true;
 }
 
+void PreviewedEmail::enterEvent(QEvent * event){
+    cout << "Mouse detected !!!" << endl;
+    cout << "Indice : " << indice << endl;
 
+    if(!isSelected){
+        QPalette p;
+        p.setColor(QPalette::Background, Qt::gray);
+        setAutoFillBackground(true);
+        setPalette(p);
+    }
+}
+
+void PreviewedEmail::leaveEvent(QEvent * event){
+    cout << "Mouse leave !!!" << endl;
+    cout << "Indice : " << indice << endl;
+
+    if(!isSelected){
+        QPalette p;
+        p.setColor(QPalette::Background, Qt::white);
+        setAutoFillBackground(true);
+        setPalette(p);
+    }
+}
+
+bool PreviewedEmail::getSelectedState(){
+    return isSelected;
+}
+
+void PreviewedEmail::setUnselected(){
+    QPalette p;
+    p.setColor(QPalette::Background, Qt::white);
+    setAutoFillBackground(true);
+    setPalette(p);
+
+    isSelected = false;
+}
 

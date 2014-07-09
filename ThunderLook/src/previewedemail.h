@@ -25,11 +25,17 @@ class PreviewedEmail : public QWidget
         void setConstraints();
         void setIHM(MimeMessage *);
 
+        bool getSelectedState();
+        void setUnselected();
+
     signals:
         void sayYourId(int);
 
     public slots:
         void mousePressEvent(QMouseEvent *);
+        void enterEvent(QEvent *);
+        void leaveEvent(QEvent *);
+
     private:
         // MimeMessage
         //MimeMessage * message; // ==> ça plante direct Oo
@@ -48,6 +54,9 @@ class PreviewedEmail : public QWidget
 
         // Indice
         int indice;
+
+        // IsSelected
+        bool isSelected;
 
 };
 

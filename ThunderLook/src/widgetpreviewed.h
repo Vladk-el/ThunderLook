@@ -7,6 +7,9 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QList>
+
+#include <QPainter>
 
 class WidgetPreviewed : public QWidget
 {
@@ -20,9 +23,12 @@ class WidgetPreviewed : public QWidget
 
     public slots:
         void getMyChildrensId(int);
+        void paintEvent(QPaintEvent *);
 
     private:
         QVBoxLayout * layout_previewed;
+
+        QList<PreviewedEmail *> * previewed;
 
 };
 
