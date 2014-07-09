@@ -9,14 +9,13 @@ Q_DECLARE_METATYPE(Meeting);
 
 MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
 {
-    /*QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL","188.165.125.160");
+    db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("188.165.125.160");
     db.setPort(2981);
-    db.setDatabaseName( "thunderlook" );
-    db.setUserName( "esgi" );
-    db.setPassword( "esgi" );*/
+    db.setDatabaseName("thunderlook");
+    db.setUserName("esgi");
+    db.setPassword("esgi");
 
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("database.db");
     if (!db.open())
     {
         QString error(db.lastError().text());
@@ -137,8 +136,8 @@ void MeetingWindow::refreshList()
         QString dateSQL;
         dateSQL = QString::number(date.year()) + "/" + QString::number(date.month()) + "/" + QString::number(date.day());
 
-        QString sql("SELECT * FROM Meeting,UsersMeeting WHERE (organizer ='" + QString::number(id_account) + "' OR USersMeeting.id_user = '" + QString::number(id_account) + "')  AND  date_begin like '" + dateSQL + " %'");
-        query.exec("SELECT * FROM Meeting,UsersMeeting WHERE (organizer ='" + QString::number(id_account) + "' OR USersMeeting.id_user = '" + QString::number(id_account) + "')  AND  date_begin like '" + dateSQL + " %'");
+        QString sql("SELECT * FROM Meeting,UsersMeeting WHERE (organizer ='" + QString::number(id_account) + "' OR UsersMeeting.id_user = '" + QString::number(id_account) + "')  AND  date_begin like '" + dateSQL + " %'");
+        query.exec("SELECT * FROM Meeting,UsersMeeting WHERE (organizer ='" + QString::number(id_account) + "' OR UsersMeeting.id_user = '" + QString::number(id_account) + "')  AND  date_begin like '" + dateSQL + " %'");
         rec = query.record();
         while(query.next())
         {

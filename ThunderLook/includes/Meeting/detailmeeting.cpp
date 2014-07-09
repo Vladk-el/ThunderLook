@@ -4,12 +4,25 @@ Q_DECLARE_METATYPE(User);
 
 DetailMeeting::DetailMeeting(int _meeting_id, QWidget *parent) : QDialog(parent)
 {
+    db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("188.165.125.160");
+    db.setPort(2981);
+    db.setDatabaseName("thunderlook");
+    db.setUserName("esgi");
+    db.setPassword("esgi");
+
+    if (!db.open())
+    {
+        qDebug() << "Impossible de se connecter à la base de données." << endl;
+        return;
+    }
+
     meeting_id = _meeting_id;
 
     setWindowTitle("Détails de la réunion");
 
     QSqlQuery *req = new QSqlQuery();
-    req->prepare("SELECT * FROM meeting m WHERE id = :meeting_id");
+    req->prepare("SELECT * FROM Meeting m WHERE id = :meeting_id");
     req->bindValue(":meeting_id", meeting_id);
     req->exec();
     QSqlRecord rec = req->record();
@@ -151,14 +164,81 @@ DetailMeeting::DetailMeeting(int _meeting_id, QWidget *parent) : QDialog(parent)
 
     setLayout(layout_main);
 
+
+    connect(btn_del, SIGNAL(clicked()), this, SLOT(deleteMeeting()));
     connect(btn_cancel, SIGNAL(clicked()), this, SLOT(close()));
     //connect(btn_action, SIGNAL(clicked()), this, SLOT(accept()));
+}
+
+void DetailMeeting::sendEmailDeleteMeeting(int id_meeting,QString date)
+{
+    global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
+
+    if(global_settings->value("Send/smtp_security").toInt() == 1)
+        smtp = new SmtpClient(global_settings->value("Send/smtp_server").toString(), global_settings->value("Send/smtp_port").toInt(), SmtpClient::SslConnection);
+    else
+        smtp = new SmtpClient(global_settings->value("Send/smtp_server").toString(), global_settings->value("Send/smtp_port").toInt());
+
+    smtp->setUser(global_settings->value("Send/smtp_user").toString());
+    smtp->setPassword(global_settings->value("Send/smtp_password").toString());
+
+    QSqlQuery query;
+    QString sql("SELECT * FROM Meeting,Users,UsersMeeting where id_meeting = " + QString::number(id_meeting));
+    query.prepare("SELECT * FROM Meeting,Users,UsersMeeting where id_meeting = :id_meeting AND UsersMeeting.id_user = Users.id AND UsersMeeting.id_meeting = Meeting.id");
+    query.bindValue(":id_meeting", id_meeting);
+    query.exec();
+    QSqlRecord rec = query.record();
+
+    smtp->connectToHost();
+    smtp->login();
+    while(query.next())
+    {
+        MimeMessage message;
+
+        message.setSender(new EmailAddress(
+                              global_settings->value("Account/user_email").toString(),
+                              global_settings->value("Account/user_name").toString()
+                              ));
+
+        QString email(query.value(rec.indexOf("address")).toString());
+        message.addRecipient(new EmailAddress(query.value(rec.indexOf("address")).toString(), ""));
+        message.setSubject("Suppression d'une reunion");
+
+        MimeHtml * text = new MimeHtml;
+        text->setHtml("<html><b>La réunion planifié le " + date  + " a été supprimé.</b></html>");
+
+        message.addPart(text);
+
+        smtp->sendMail(message);
+    }
+    smtp->quit();
+
+    close();
 }
 
 void DetailMeeting::quit(){
     this->quit();
 }
 
-void DetailMeeting::deleteMeeting(){
+void DetailMeeting::deleteMeeting()
+{
+    QSqlQuery query;
+    query.prepare("SELECT * FROM Meeting where id_meeting = :id_meeting");
+    query.bindValue(":id_meeting", meeting_id);
+    query.exec();
+    QSqlRecord rec = query.record();
+    query.next();
 
+    sendEmailDeleteMeeting(meeting_id,query.value(rec.indexOf("date_begin")).toString());
+
+    query.prepare("DELETE FROM UsersMeeting where id_meeting = :id_meeting");
+    query.bindValue(":id_meeting", meeting_id);
+    query.exec();
+
+    query.prepare("DELETE FROM Meeting where id = :id_meeting");
+    query.bindValue(":id_meeting", meeting_id);
+    query.exec();
+
+    this->close();
+    emit notifyRefreshList();
 }
