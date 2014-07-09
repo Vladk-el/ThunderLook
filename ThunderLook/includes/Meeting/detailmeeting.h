@@ -18,6 +18,7 @@
 #include <QMessageBox>
 #include <QLineEdit>
 
+#include "../smtpClient/src/smtpclient.h"
 #include "user.h"
 #include "room.h"
 
@@ -49,6 +50,8 @@ private:
     QDateTimeEdit *meeting_dt_end;
 
     QStandardItemModel *model_users;
+
+    QSettings *global_settings;
 
 private slots:
     void quit();

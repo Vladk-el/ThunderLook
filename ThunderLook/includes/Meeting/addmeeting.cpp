@@ -15,18 +15,24 @@ AddMeeting::AddMeeting(QWidget *parent, int account_id) : QDialog(parent)
     setWindowTitle("Planifier une réunion");
 
     /*db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName( "http://188.165.125.160:2980" );
+    db.setHostName( "188.165.125.160" );
+    db.setPort(2980);
     db.setDatabaseName( "thunderlook" );
     db.setUserName( "esgi" );
     db.setPassword( "esgi" );*/
 
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("meetings.db");
+    db.setDatabaseName("database.db");
     if (!db.open())
     {
         qDebug() << "Impossible de se connecter à la base de données." << endl;
         return;
     }
+
+    QStringList list = QSqlDatabase::drivers();
+    //qDebug() << "Test :" << QSqlDatabase:: << endl;
+    for(int i = 0 ; i < list.length() ; i++)
+        qDebug() << list.at(i);
 
     id = account_id;
 
@@ -202,9 +208,8 @@ void AddMeeting::add()
     int duration_minute = (meeting_duration->time().hour()*60) + meeting_duration->time().minute();
     qDebug() << duration_minute << endl;
 
-    QDateTime *date_end = new QDateTime(QDate(meeting_dt_begin->date().year(),meeting_dt_begin->date().month(),meeting_dt_begin->date().day()),meeting_dt_begin->time().addSecs(duration_minute * 60));
-
-    QSqlQuery query;
+    QDateTime *date_begin_real = new QDateTime(QDate(meeting_dt_begin->date().year(),meeting_dt_begin->date().month(),meeting_dt_begin->date().day()),meeting_dt_begin->time());
+    QDateTime *date_end_real = new QDateTime(QDate(meeting_dt_begin->date().year(),meeting_dt_begin->date().month(),meeting_dt_begin->date().day()),meeting_dt_begin->time().addSecs(duration_minute * 60));
 
     // Get room selected
     Room room = modelRooms->item(meetings_rooms->currentIndex())->data().value<Room>();
@@ -213,20 +218,55 @@ void AddMeeting::add()
     dt_begin = QString::number(meeting_dt_begin->date().year()) + "/" + QString::number(meeting_dt_begin->date().month()) + "/" + QString::number(meeting_dt_begin->date().day()) + " " + QString::number(meeting_dt_begin->time().hour()) + ":" + QString::number(meeting_dt_begin->time().minute());
 
     QString dt_end;
-    dt_end = QString::number(date_end->date().year()) + "/" + QString::number(date_end->date().month()) + "/" + QString::number(date_end->date().day()) + " " + QString::number(date_end->time().hour()) + ":" + QString::number(date_end->time().minute());
+    dt_end = QString::number(date_end_real->date().year()) + "/" + QString::number(date_end_real->date().month()) + "/" + QString::number(date_end_real->date().day()) + " " + QString::number(date_end_real->time().hour()) + ":" + QString::number(date_end_real->time().minute());
+
+    QSqlQuery query;
+
+    // Check if room is available
+    query.prepare("SELECT * FROM Meeting where room = :room");
+    query.bindValue(":room", room.id());
+    query.exec();
+    QSqlRecord rec = query.record();
+
+    while(query.next())
+    {
+        qDebug() << "Entrer dans query .next " << endl;
+        QStringList date_begin = query.value(rec.indexOf("date_begin")).toString().split(" ").at(0).split("/");
+        QStringList time_begin = query.value(rec.indexOf("date_begin")).toString().split(" ").at(1).split(":");
+
+        QDate date_begin_edit(date_begin.at(0).toInt(),date_begin.at(1).toInt(),date_begin.at(2).toInt());
+        QTime time_begin_edit(time_begin.at(0).toInt(),time_begin.at(1).toInt(),0);
+
+        QStringList date_end_bis = query.value(rec.indexOf("date_end")).toString().split(" ").at(0).split("/");
+        QStringList time_end = query.value(rec.indexOf("date_end")).toString().split(" ").at(1).split(":");
+
+        QDate date_end_edit(date_end_bis.at(0).toInt(),date_end_bis.at(1).toInt(),date_end_bis.at(2).toInt());
+        QTime time_end_edit(time_end.at(0).toInt(),time_end.at(1).toInt(),0);
+
+        QDateTime datetime_begin(date_begin_edit,time_begin_edit);
+        QDateTime datetime_end(date_end_edit,time_end_edit);
+
+        if(date_begin_real->operator >(datetime_begin) && date_begin_real->operator <(datetime_end))
+        {
+            QMessageBox::critical(this, "Salle indisponible", "La salle selectionné est indisponible. Veuillez en choisir une autre.");
+            return;
+        }
+    }
 
     // Insert meeting
-    query.prepare("INSERT INTO Meeting (date_begin,date_end,duration,title,room,color,compulsory,organizer) "
-                  "VALUES (:date_begin,:date_end, :duration,:title,:room,:color,:compulsory,:organizer)");
+    query.prepare("INSERT INTO Meeting (date_begin,date_end,duration,room,title,color,compulsory,organizer) "
+                  "VALUES (:date_begin,:date_end,:duration,:room,:title,:color,:compulsory,:organizer)");
     query.bindValue(":date_begin", dt_begin);
     query.bindValue(":date_end", dt_end);
     query.bindValue(":duration", duration_minute);
+    query.bindValue(":room", room.id());
     query.bindValue(":title",title_meeting->text());
-    query.bindValue(":room", room.id() );
     query.bindValue(":color", combobox_colors->currentText());
     query.bindValue(":compulsory",1);
-    query.bindValue(":organizer",id );
+    query.bindValue(":organizer",id);
     query.exec();
+
+    QString error(query.lastError().text());
 
     query.prepare("SELECT * FROM Meeting where date_begin = :date_begin AND date_end = :date_end AND duration = :duration AND title = :title AND room = :room");
     query.bindValue(":date_begin", dt_begin);

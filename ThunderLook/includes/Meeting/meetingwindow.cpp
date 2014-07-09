@@ -9,11 +9,6 @@ Q_DECLARE_METATYPE(Meeting);
 
 MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
 {
-    id_account = 1;
-
-    this->setFixedWidth(1065);
-    this->setFixedHeight(630);
-
     /*QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL","188.165.125.160");
     db.setPort(2981);
     db.setDatabaseName( "thunderlook" );
@@ -21,7 +16,7 @@ MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
     db.setPassword( "esgi" );*/
 
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("meetings.db");
+    db.setDatabaseName("database.db");
     if (!db.open())
     {
         QString error(db.lastError().text());
@@ -33,6 +28,20 @@ MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
         qDebug() << db.lastError().text() << "Impossible de se connecter à la base de données." << endl;
         return;
     }
+
+    global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
+
+    QSqlQuery *reqOrganizer = new QSqlQuery();
+    reqOrganizer->prepare("SELECT * FROM Users WHERE address = :address");
+    reqOrganizer->bindValue(":address", global_settings->value("Send/smtp_user").toString());
+    reqOrganizer->exec();
+    QSqlRecord recOrganizer = reqOrganizer->record();
+    reqOrganizer->next();
+
+    id_account = reqOrganizer->value(recOrganizer.indexOf("id")).toInt();
+
+    this->setFixedWidth(1065);
+    this->setFixedHeight(630);
 
     qRegisterMetaType<Meeting>("Meeting");
 
@@ -78,8 +87,6 @@ MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
     layout_main->addLayout(layout_agenda);
 
     this->setLayout(layout_main);
-    //this->setLayout(widget_central);
-    //this->setCentralWidget(widget_central);
 
     refreshList();
 
@@ -190,7 +197,7 @@ void MeetingWindow::displayInfo() {
 }
 
 void MeetingWindow::addMeeting() {
-    AddMeeting *meeting = new AddMeeting(this,1);
+    AddMeeting *meeting = new AddMeeting(this,id_account);
     connect(meeting, SIGNAL(notifyRefreshList()), this, SLOT(refreshList()));
     meeting->exec();
 }

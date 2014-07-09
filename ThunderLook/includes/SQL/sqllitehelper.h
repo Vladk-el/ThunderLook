@@ -20,6 +20,7 @@ class SqlLiteHelper : public QObject
 
 public:
     explicit SqlLiteHelper(QObject *parent = 0);
+    bool insertUser(QString addr);
     bool insertEmail(MimeMessage * mail);
     QList<MimeMessage *> getAllEmails();
     QSqlDatabase db;

@@ -87,7 +87,6 @@ void MainFrame::setToolBars(){
     toolbar_top->addAction(action_refresh_mails);
     toolbar_top->addAction(action_new_meeting);
 
-
     //toolbar_top->setOrientation(Qt::Vertical);
 }
 
@@ -105,11 +104,9 @@ void MainFrame::setLayouts(){
     view_list_folders->setModel(model_folders);
     view_list_folders->setMaximumWidth(this->width()/10);
 
-
-    //getEmails();
+    getEmails();
     SqlLiteHelper * helper = new SqlLiteHelper;
     messages = helper->getAllEmails();
-
 
     widget_previewed = new WidgetPreviewed(messages);
 
@@ -128,8 +125,8 @@ void MainFrame::setLayouts(){
 
     layout_detailled->addWidget(detailledEmail);
 
-        widget_detailled->setLayout(layout_detailled);
-        widget_previewed->setMaximumWidth(5*this->width()/10);
+    widget_detailled->setLayout(layout_detailled);
+    widget_previewed->setMaximumWidth(5*this->width()/10);
 
 
     layout_main->addWidget(view_list_folders);
