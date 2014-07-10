@@ -111,3 +111,11 @@ void PreviewedEmail::setUnselected(){
     isSelected = false;
 }
 
+void PreviewedEmail::paintEvent(QPaintEvent * event){
+
+    QPainter painter(this);
+
+    painter.drawRoundedRect(0,0,width()-1, height()-1,0,0);
+
+    QWidget::paintEvent(event);
+}

@@ -35,7 +35,7 @@ void DetailledEmail::setIHM(MimeMessage * message){
                 label_sender->setStyleSheet(style_label);
             label_date = new QLabel(message->getDate());
                 label_date->setStyleSheet(style_label);
-            label_to = new QLabel("label_to");
+            label_to = new QLabel("");
                 label_to->setStyleSheet(style_label);
             label_attachement = new QLabel("label_attachement");
                 label_attachement->setStyleSheet(style_label);
@@ -60,8 +60,31 @@ void DetailledEmail::update(MimeMessage * message){
     label_sender->setText(message->getSender().getAddress());
     label_date->setText(message->getDate());
 
-    if(message->getRecipients().size() > 0){
-        label_to->setText(message->getRecipients().at(0)->getName());
+    if(message->getRecipients(MimeMessage::To).size() > 0){
+        cout << "MimeMessage::To.size() : " << message->getRecipients(MimeMessage::To).size() << endl;
+        for(int i = 0; i < message->getRecipients(MimeMessage::To).size(); i++){
+            if(label_to->text().size() > 0)
+                label_to->setText(label_to->text().append(","));
+            label_to->setText(label_to->text().append(message->getRecipients(MimeMessage::To).at(i)->getAddress()));
+        }
+    }
+
+    if(message->getRecipients(MimeMessage::Cc).size() > 0){
+        cout << "MimeMessage::Cc.size() : " << message->getRecipients(MimeMessage::Cc).size() << endl;
+        for(int i = 0; i < message->getRecipients(MimeMessage::Cc).size(); i++){
+            if(label_to->text().size() > 0)
+                label_to->setText(label_to->text().append(","));
+            label_to->setText(label_to->text().append(message->getRecipients(MimeMessage::Cc).at(i)->getAddress()));
+        }
+    }
+
+    if(message->getRecipients(MimeMessage::Bcc).size() > 0){
+        cout << "MimeMessage::Bcc.size() : " << message->getRecipients(MimeMessage::Bcc).size() << endl;
+        for(int i = 0; i < message->getRecipients(MimeMessage::Bcc).size(); i++){
+            if(label_to->text().size() > 0)
+                label_to->setText(label_to->text().append(","));
+            label_to->setText(label_to->text().append(message->getRecipients(MimeMessage::Bcc).at(i)->getAddress()));
+        }
     }
 
     label_attachement->setText("label attachement");
