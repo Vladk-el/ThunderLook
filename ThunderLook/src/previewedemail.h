@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPixmap>
+#include <QColor>
 
 class PreviewedEmail : public QWidget
 {
