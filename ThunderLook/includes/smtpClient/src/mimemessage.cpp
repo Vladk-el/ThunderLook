@@ -23,8 +23,15 @@ MimeMessage::~MimeMessage()
     }
 }
 
-/* [1] --- */
+QList<MimeAttachment *> MimeMessage::getAttachment()
+{
+    return attachment;
+}
 
+void MimeMessage::addAttachment(MimeAttachment * mimeAttachment)
+{
+    this->attachment.push_back(mimeAttachment);
+}
 
 /* [2] Getters and Setters */
 MimePart& MimeMessage::getContent() {

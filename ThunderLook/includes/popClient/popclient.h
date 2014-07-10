@@ -62,6 +62,7 @@ private:
     int port;
     QString user;
     QString password;
+    QByteArray array;
 
     int connectionTimeout;
     int responseTimeout;

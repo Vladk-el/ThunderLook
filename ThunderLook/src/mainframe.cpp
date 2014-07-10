@@ -34,7 +34,6 @@ void MainFrame::init(){
     show();
 }
 
-
 void MainFrame::setSettings(){
     global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
 }
@@ -178,8 +177,11 @@ void MainFrame::slot_refresh_mails(){
 }
 
 void MainFrame::slot_new_meeting(){
-    MeetingWindow *meeting = new MeetingWindow;
-    meeting->show();
+    //MeetingWindow *meeting = new MeetingWindow;
+    //meeting->show();
+
+    Contact *contact = new Contact;
+    contact->show();
 }
 
 void MainFrame::slot_configure_account(){

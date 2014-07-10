@@ -25,19 +25,37 @@ MimeAttachment::MimeAttachment(QFile *file)
     : MimeFile(file)
 {
 }
+
 MimeAttachment::MimeAttachment(const QByteArray& stream, const QString& fileName): MimeFile(stream, fileName)
 {
-
+    this->stream = stream;
+    this->filename = fileName;
 }
 
 MimeAttachment::~MimeAttachment()
 {
+
 }
 
-/* [1] --- */
+const QString & MimeAttachment::getFilename() const
+{
+    return this->filename;
+}
 
+void MimeAttachment::setFilename(const QString & filename)
+{
+    this->filename = filename;
+}
 
-/* [2] Protected methods */
+const QByteArray & MimeAttachment::getStream() const
+{
+    return this->stream;
+}
+
+void MimeAttachment::setStream(const QByteArray & stream)
+{
+    this->stream = stream;
+}
 
 void MimeAttachment::prepare()
 {
@@ -46,5 +64,3 @@ void MimeAttachment::prepare()
     /* !!! IMPORTANT !!! */
     MimeFile::prepare();
 }
-
-/* [2] --- */

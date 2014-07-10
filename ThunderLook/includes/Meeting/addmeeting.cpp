@@ -21,19 +21,11 @@ AddMeeting::AddMeeting(QWidget *parent, int account_id) : QDialog(parent)
     db.setUserName("esgi");
     db.setPassword("esgi");
 
-    //db = QSqlDatabase::addDatabase("QSQLITE");
-    //db.setDatabaseName("database.db");
-
     if (!db.open())
     {
         qDebug() << "Impossible de se connecter à la base de données." << endl;
         return;
     }
-
-    QStringList list = QSqlDatabase::drivers();
-    //qDebug() << "Test :" << QSqlDatabase:: << endl;
-    for(int i = 0 ; i < list.length() ; i++)
-        qDebug() << list.at(i);
 
     id = account_id;
 
@@ -91,9 +83,6 @@ AddMeeting::AddMeeting(QWidget *parent, int account_id) : QDialog(parent)
     meeting_list_users = new QListView(this);
     modelTargetUsers = new QStandardItemModel();
     meetings_add_users->setModel(modelSourceUsers);
-
-    QVBoxLayout *layout_add_users = new QVBoxLayout();
-    layout_add_users->addWidget(meetings_add_users);
 
     btn_add_user = new QPushButton("Ajouter");
 

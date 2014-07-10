@@ -41,7 +41,7 @@ void PopClient::getNumberEmailsToRead()
     qDebug() << "NbTotal email : " << nbTotalEmail << endl;
 }
 
- QList<MimeMessage*> PopClient::getAllEmails()
+QList<MimeMessage*> PopClient::getAllEmails()
 {
     getNumberEmailsToRead();
     QList<MimeMessage*> emails;
@@ -83,14 +83,27 @@ MimeMessage * PopClient::getEmail(int id)
         QString to;
         QString cc;
 
-        QStringList listLineEmail = responseText.split("\r\n");
+        QString response;
+        for(int i = 0 ; i < array.size() ; i++)
+            response.append(array.at(i));
 
-        while(listLineEmail.length() < 25)
+        QStringList listLineEmail = response.split("\r\n");
+
+        if(listLineEmail.at(listLineEmail.size() - 2) != ".")
         {
-            sendMessage("RETR " + indice);
-            waitForResponse();
+            while(1)
+            {
+                waitForResponse();
 
-            listLineEmail = responseText.split("\r\n");
+                response.clear();
+                for(int i = 0 ; i < array.size() ; i++)
+                    response.append(array.at(i));
+
+                listLineEmail += response.split("\r\n");
+
+                if(listLineEmail.at(listLineEmail.size() - 2) == ".");
+                break;
+            }
         }
 
         for(int i = 0 ; i < listLineEmail.length() ; i++)
@@ -173,39 +186,39 @@ MimeMessage * PopClient::getEmail(int id)
 
             if(listLineEmail[i].startsWith("Cc:"))
             {
-                    cc = listLineEmail[i];
-                    for(int j = i + 1 ; j < listLineEmail.length() ; j++)
-                    {
-                        if(listLineEmail[j].startsWith("	"))
-                            cc += listLineEmail[j];
+                cc = listLineEmail[i];
+                for(int j = i + 1 ; j < listLineEmail.length() ; j++)
+                {
+                    if(listLineEmail[j].startsWith("	"))
+                        cc += listLineEmail[j];
 
-                        else
-                        {
-                            i = j-1 ;
-                            break;
-                        }
+                    else
+                    {
+                        i = j-1 ;
+                        break;
+                    }
+                }
+
+                cc = cc.mid(3);
+
+                QStringList listCc = cc.split(",");
+
+                for(int i = 0 ; i < listCc.length() ; i++)
+                {
+                    listCc[i] = listCc[i].replace("\t","").replace(" ","");
+
+                    QString name;
+                    int first;
+                    if((first = listCc[i].indexOf("<")) != -1)
+                    {
+                        name = listCc[i].mid(0,first);
+
+                        int last = listCc[i].indexOf(">");
+                        listCc[i] = listCc[i].mid(first+1,(last-first) - 1);
                     }
 
-                    cc = cc.mid(3);
-
-                    QStringList listCc = cc.split(",");
-
-                    for(int i = 0 ; i < listCc.length() ; i++)
-                    {
-                        listCc[i] = listCc[i].replace("\t","").replace(" ","");
-
-                        QString name;
-                        int first;
-                        if((first = listCc[i].indexOf("<")) != -1)
-                        {
-                            name = listCc[i].mid(0,first);
-
-                            int last = listCc[i].indexOf(">");
-                            listCc[i] = listCc[i].mid(first+1,(last-first) - 1);
-                        }
-
-                        email->addCc(new EmailAddress(listCc[i],name));
-                    }
+                    email->addCc(new EmailAddress(listCc[i],name));
+                }
             }
 
             if(listLineEmail[i].startsWith("From:"))
@@ -310,13 +323,15 @@ MimeMessage * PopClient::getEmail(int id)
                 QString string(byteArray);
                 qDebug() << "String : " << string << endl;
 
-                QFile file("test.txt");
+                QFile file(filename);
                 file.open( QIODevice::WriteOnly );
                 file.write(string.toUtf8());
                 file.close();
 
                 MimeAttachment * attachment = new MimeAttachment(plain.toUtf8(),filename);
-                attachment->setContentType("text/plain");
+                attachment->setContentType(contentType);
+
+                email->addAttachment(attachment);
                 email->addPart(attachment);
             }
 
@@ -369,13 +384,15 @@ void PopClient::waitForResponse()
 
         while (socket->canReadLine())
         {
-            QByteArray array = socket->readAll();
+            array = socket->readAll();
 
             for(int i = 0 ; i < array.length() ; i++)
                 responseText.append(array.at(i));
+
             //response = socket->readLine();
             //responseText.append(response);
 
+            qDebug() << responseText << endl;
             responseCode = responseText[0];
 
             if(line == 0)

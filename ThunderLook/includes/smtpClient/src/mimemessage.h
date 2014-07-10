@@ -24,6 +24,7 @@
 #include "emailaddress.h"
 #include "mimetext.h"
 #include "mimehtml.h"
+#include "mimeattachment.h"
 
 #include <QDebug>
 
@@ -78,19 +79,17 @@ public:
 
     const QString & getHtml() const;
     void setHtml(const QString & html);
-    /* [2] --- */
 
+    QList<MimeAttachment *> getAttachment();
+    void addAttachment(MimeAttachment * mimeAttachment);
 
     /* [3] Public methods */
-
     virtual QString toString();
 
     /* [3] --- */
 
 protected:
-
     /* [4] Protected members */
-
     EmailAddress* sender;
     QList<EmailAddress*> recipientsTo, recipientsCc, recipientsBcc;
     QString subject;
@@ -99,6 +98,7 @@ protected:
     QString indice;
     QString date;
     MimePart *content;
+    QList<MimeAttachment *> attachment;
     bool autoMimeContentCreated;
     
     MimePart::Encoding hEncoding;

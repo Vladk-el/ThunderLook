@@ -30,6 +30,7 @@ QList<MimeMessage *> SqlLiteHelper::getAllEmails()
     qDebug() << "Ok Connection etablie" << endl;
 
     QSqlQuery query;
+    QSqlQuery queryAttachment;
 
     query.exec("SELECT * FROM Emails");
 
@@ -64,8 +65,7 @@ QList<MimeMessage *> SqlLiteHelper::getAllEmails()
 
         // Add recipients
         QSqlQuery recipients;
-        recipients.exec("SELECT * FROM Recipient where id_email = '" + query.value(2).toString() + "'");
-
+        recipients.exec("SELECT * FROM Recipients where id_email = '" + query.value(2).toString() + "'");
         while(recipients.next()) // get all recipients
         {
             if(recipients.value(4).toInt() == 0) // TO
@@ -82,6 +82,21 @@ QList<MimeMessage *> SqlLiteHelper::getAllEmails()
             {
                 email->addBcc(new EmailAddress(recipients.value(3).toString(),recipients.value(2).toString()));
             }
+        }
+
+        email->setDate(query.value(4).toString());
+
+        queryAttachment.prepare("SELECT * FROM Attachments WHERE id_email = :id_email");
+        queryAttachment.bindValue(":id_email", email->getIndice());
+        queryAttachment.exec();
+        QSqlRecord recAttachment = queryAttachment.record();
+
+        while(queryAttachment.next())
+        {
+            MimeAttachment * attachment = new MimeAttachment(queryAttachment.value(recAttachment.indexOf("data")).toByteArray(),QString(queryAttachment.value(recAttachment.indexOf("filename")).toString()));
+            attachment->setContentType(queryAttachment.value(recAttachment.indexOf("data")).toString());
+
+            email->addAttachment(attachment);
         }
 
         emails << email;
@@ -170,6 +185,21 @@ bool SqlLiteHelper::insertEmail(MimeMessage * mail)
             query.bindValue(":recipient_type","3");
 
             query.exec();
+        }
+
+        if(mail->getAttachment().count() > 0)
+        {
+            for(int i = 0 ;i < mail->getAttachment().count() ;i++)
+            {
+                query.prepare("INSERT INTO Attachments (id_email, filename, data,content_type) VALUES (:id_email, :filename, :data,:content_type)");
+
+                query.bindValue(":id_email", mail->getIndice());
+                query.bindValue(":filename", mail->getAttachment().at(i)->getFilename());
+                query.bindValue(":data",mail->getAttachment().at(i)->getStream());
+                query.bindValue(":content_type",mail->getAttachment().at(i)->getContentType());
+
+                query.exec();
+            }
         }
 
         return true;

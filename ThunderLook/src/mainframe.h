@@ -7,6 +7,7 @@
 #include "previewedemail.h"
 #include "widgetpreviewed.h"
 #include "detailledemail.h"
+#include "contact.h"
 
 #include "global.h"
 

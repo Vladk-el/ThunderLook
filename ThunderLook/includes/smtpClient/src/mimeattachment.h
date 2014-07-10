@@ -35,7 +35,16 @@ public:
 
     ~MimeAttachment();
 
+    const QString & getFilename() const;
+    void setFilename(const QString & filename);
+
+    const QByteArray & getStream() const;
+    void setStream(const QByteArray & stream);
     /* [1] --- */
+
+private:
+    QString filename;
+    QByteArray stream;
 
 protected:
 
