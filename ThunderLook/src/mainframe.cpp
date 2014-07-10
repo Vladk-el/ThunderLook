@@ -116,7 +116,6 @@ void MainFrame::setLayouts(){
     connect(widget_previewed, SIGNAL(sayMyChildrenSelectedId(int)), this, SLOT(slot_get_email_indice(int)));
 
     // Detailled mail
-
     widget_detailled = new QWidget;
     layout_detailled = new QVBoxLayout;
 

@@ -78,6 +78,25 @@ void MimeMessage::setSubject(const QString & subject)
     this->subject = subject;
 }
 
+const QString & MimeMessage::getText() const
+{
+    return this->textMail;
+}
+
+void MimeMessage::setText(const QString & text)
+{
+    this->textMail = text;
+}
+
+const QString & MimeMessage::getHtml() const
+{
+    return this->html;
+}
+void MimeMessage::setHtml(const QString & html)
+{
+    this->html = html;
+}
+
 const QString & MimeMessage::getSubject() const
 {
     return subject;

@@ -31,6 +31,7 @@ public:
 private:
     int user_id;
     int meeting_id;
+    int id_room;
     SmtpClient *smtp;
 
     QLabel *lb_label;
@@ -59,6 +60,8 @@ private slots:
     void quit();
     void deleteMeeting();
     void sendEmailDeleteMeeting(int id_meeting,QString date);
+    void sendEmailUpdateMeeting(int id_meeting,QString date);
+    void updateMeeting();
 
 signals:
     void notifyRefreshList();

@@ -365,12 +365,16 @@ void AddMeeting::sendEmail(int id_meeting,QString date)
 
         QString email(query.value(rec.indexOf("address")).toString());
         message.addRecipient(new EmailAddress(query.value(rec.indexOf("address")).toString(), ""));
-        message.setSubject("Participation à une reunion");
+        message.setSubject("Participation a une reunion");
 
-        MimeHtml * text = new MimeHtml;
+        MimeText *text = new MimeText;
+        text->setText("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
+
+        MimeHtml * textHTML = new MimeHtml;
         QString link("http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=1");
-        text->setHtml("<html>Souhaitez-vous participé à la réunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
+        textHTML->setHtml("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
 
+        message.addPart(textHTML);
         message.addPart(text);
 
         smtp->sendMail(message);

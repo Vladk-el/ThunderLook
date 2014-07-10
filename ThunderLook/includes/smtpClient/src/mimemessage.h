@@ -72,6 +72,12 @@ public:
 
     const QString & getDate() const;
     void setDate(const QString & date);
+
+    const QString & getText() const;
+    void setText(const QString & text);
+
+    const QString & getHtml() const;
+    void setHtml(const QString & html);
     /* [2] --- */
 
 
@@ -88,6 +94,8 @@ protected:
     EmailAddress* sender;
     QList<EmailAddress*> recipientsTo, recipientsCc, recipientsBcc;
     QString subject;
+    QString html;
+    QString textMail;
     QString indice;
     QString date;
     MimePart *content;
