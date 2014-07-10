@@ -67,18 +67,3 @@ void DetailledEmail::update(MimeMessage * message){
     label_attachement->setText("label attachement");
     label_corps->setText(message->getContent().toString());
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

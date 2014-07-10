@@ -77,11 +77,14 @@ DetailMeeting::DetailMeeting(int _meeting_id, QWidget *parent) : QDialog(parent)
     QSqlRecord recOrganizer = reqOrganizer->record();
     reqOrganizer->next();
 
-    // Enable QPushButton "Supprimer à jour" AND "Mettre à jour"
+    // Enable Item if user is not organizer
     if(reqOrganizer->value(recOrganizer.indexOf("address")).toString() != global_settings->value("Send/smtp_user").toString())
     {
         btn_del->setEnabled(false);
         btn_action->setEnabled(false);
+        meeting_dt_end->setEnabled(false);
+        meeting_dt_begin->setEnabled(false);
+        meeting_duration->setEnabled(false);
     }
 
     cb_organizer = new QComboBox();
@@ -143,6 +146,8 @@ DetailMeeting::DetailMeeting(int _meeting_id, QWidget *parent) : QDialog(parent)
         cb_room->addItem(reqRoom->value(recRoom.indexOf("name")).toString());
     }
 
+    id_room = req->value(rec.indexOf("id")).toInt();
+
     QFormLayout *fl_data = new QFormLayout;
     fl_data->addRow("Libellé:", lb_label);
     fl_data->addRow("Début:", meeting_dt_begin);
@@ -164,10 +169,9 @@ DetailMeeting::DetailMeeting(int _meeting_id, QWidget *parent) : QDialog(parent)
 
     setLayout(layout_main);
 
-
     connect(btn_del, SIGNAL(clicked()), this, SLOT(deleteMeeting()));
     connect(btn_cancel, SIGNAL(clicked()), this, SLOT(close()));
-    //connect(btn_action, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(btn_action, SIGNAL(clicked()), this, SLOT(updateMeeting()));
 }
 
 void DetailMeeting::sendEmailDeleteMeeting(int id_meeting,QString date)
@@ -214,6 +218,113 @@ void DetailMeeting::sendEmailDeleteMeeting(int id_meeting,QString date)
     smtp->quit();
 
     close();
+}
+
+void DetailMeeting::sendEmailUpdateMeeting(int id_meeting,QString date)
+{
+    global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
+
+    if(global_settings->value("Send/smtp_security").toInt() == 1)
+        smtp = new SmtpClient(global_settings->value("Send/smtp_server").toString(), global_settings->value("Send/smtp_port").toInt(), SmtpClient::SslConnection);
+    else
+        smtp = new SmtpClient(global_settings->value("Send/smtp_server").toString(), global_settings->value("Send/smtp_port").toInt());
+
+    smtp->setUser(global_settings->value("Send/smtp_user").toString());
+    smtp->setPassword(global_settings->value("Send/smtp_password").toString());
+
+    QSqlQuery query;
+    QString sql("SELECT * FROM Meeting,Users,UsersMeeting where id_meeting = " + QString::number(id_meeting));
+    query.prepare("SELECT * FROM Meeting,Users,UsersMeeting where id_meeting = :id_meeting AND UsersMeeting.id_user = Users.id AND UsersMeeting.id_meeting = Meeting.id");
+    query.bindValue(":id_meeting", id_meeting);
+    query.exec();
+    QSqlRecord rec = query.record();
+
+    smtp->connectToHost();
+    smtp->login();
+    while(query.next())
+    {
+        MimeMessage message;
+
+        message.setSender(new EmailAddress(
+                              global_settings->value("Account/user_email").toString(),
+                              global_settings->value("Account/user_name").toString()
+                              ));
+
+        QString email(query.value(rec.indexOf("address")).toString());
+        message.addRecipient(new EmailAddress(query.value(rec.indexOf("address")).toString(), ""));
+        message.setSubject("Modification horaire d'une reunion");
+
+        MimeHtml * text = new MimeHtml;
+        text->setHtml("<html><b>La réunion planifié le " + date  + " a été modifié.</b></html>");
+
+        message.addPart(text);
+
+        smtp->sendMail(message);
+    }
+    smtp->quit();
+
+    close();
+}
+
+void DetailMeeting::updateMeeting()
+{
+    int duration_minute = (meeting_duration->time().hour()*60) + meeting_duration->time().minute();
+
+    QDateTime *date_begin_real = new QDateTime(QDate(meeting_dt_begin->date().year(),meeting_dt_begin->date().month(),meeting_dt_begin->date().day()),meeting_dt_begin->time());
+
+    QString dt_begin;
+    dt_begin = QString::number(meeting_dt_begin->date().year()) + "/" + QString::number(meeting_dt_begin->date().month()) + "/" + QString::number(meeting_dt_begin->date().day()) + " " + QString::number(meeting_dt_begin->time().hour()) + ":" + QString::number(meeting_dt_begin->time().minute());
+
+    QString dt_end;
+    dt_end = QString::number(meeting_dt_end->date().year()) + "/" + QString::number(meeting_dt_end->date().month()) + "/" + QString::number(meeting_dt_end->date().day()) + " " + QString::number(meeting_dt_end->time().hour()) + ":" + QString::number(meeting_dt_end->time().minute());
+
+    QSqlQuery query;
+    query.prepare("SELECT * FROM Meeting where room = :room");
+    query.bindValue(":room", id_room);
+    query.exec();
+    QSqlRecord rec = query.record();
+
+    while(query.next())
+    {
+        QStringList date_begin = query.value(rec.indexOf("date_begin")).toString().split(" ").at(0).split("/");
+        QStringList time_begin = query.value(rec.indexOf("date_begin")).toString().split(" ").at(1).split(":");
+
+        QDate date_begin_edit(date_begin.at(0).toInt(),date_begin.at(1).toInt(),date_begin.at(2).toInt());
+        QTime time_begin_edit(time_begin.at(0).toInt(),time_begin.at(1).toInt(),0);
+
+        QStringList date_end_bis = query.value(rec.indexOf("date_end")).toString().split(" ").at(0).split("/");
+        QStringList time_end = query.value(rec.indexOf("date_end")).toString().split(" ").at(1).split(":");
+
+        QDate date_end_edit(date_end_bis.at(0).toInt(),date_end_bis.at(1).toInt(),date_end_bis.at(2).toInt());
+        QTime time_end_edit(time_end.at(0).toInt(),time_end.at(1).toInt(),0);
+
+        QDateTime datetime_begin(date_begin_edit,time_begin_edit);
+        QDateTime datetime_end(date_end_edit,time_end_edit);
+
+        if(date_begin_real->operator >(datetime_begin) && date_begin_real->operator <(datetime_end))
+        {
+            QMessageBox::critical(this, "Salle indisponible", "La salle selectionné est indisponible.");
+            return;
+        }
+    }
+
+    query.prepare("SELECT * FROM Meeting where id_meeting = :id_meeting");
+    query.bindValue(":id_meeting", meeting_id);
+    query.exec();
+    rec = query.record();
+    query.next();
+
+    sendEmailUpdateMeeting(meeting_id,dt_begin);
+
+    query.prepare("Update Meeting set date_begin = :date_begin , date_end =:date_end , duration = :duration WHERE id = :id_meeting");
+    query.bindValue(":date_begin", dt_begin);
+    query.bindValue(":date_end", dt_end);
+    query.bindValue(":duration", duration_minute);
+    query.bindValue(":id_meeting", meeting_id);
+    query.exec();
+
+    this->close();
+    emit notifyRefreshList();
 }
 
 void DetailMeeting::quit(){

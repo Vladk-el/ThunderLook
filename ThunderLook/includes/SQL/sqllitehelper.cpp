@@ -50,6 +50,9 @@ QList<MimeMessage *> SqlLiteHelper::getAllEmails()
         text->setText(query.value(6).toString());
         email->addPart(text);
 
+        email->setText(query.value(7).toString());
+        email->setHtml(query.value(8).toString());
+
         // Add senders
         QSqlQuery sender;
         sender.exec("SELECT * from Sender where id_email = '" + query.value(2).toString() + "'");
@@ -105,12 +108,14 @@ bool SqlLiteHelper::insertEmail(MimeMessage * mail)
         QSqlQuery query;
 
         // INSERT EMAIL
-        query.prepare("INSERT INTO Emails (indice, subject, date,content) "
-                      "VALUES (:indice, :subject, :date,:content)");
+        query.prepare("INSERT INTO Emails (indice, subject, date,content,text,html) "
+                      "VALUES (:indice, :subject, :date,:content,:text,:html)");
         query.bindValue(":indice", mail->getIndice());
         query.bindValue(":subject", mail->getSubject());
         query.bindValue(":date",mail->getDate());
         query.bindValue(":content", mail->getContent().toString());
+        query.bindValue(":text", mail->getText());
+        query.bindValue(":html", mail->getHtml());
         query.exec();
 
         QString test(query.lastError().text());

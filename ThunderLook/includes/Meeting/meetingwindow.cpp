@@ -18,12 +18,9 @@ MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
 
     if (!db.open())
     {
-        QString error(db.lastError().text());
-
         for(int i = 0 ; i < QSqlDatabase::drivers().length() ; i++)
             qDebug() << QSqlDatabase::drivers().at(i);
 
-        //QSqlError error = QSqlDatabase::lastError();
         qDebug() << db.lastError().text() << "Impossible de se connecter à la base de données." << endl;
         return;
     }
@@ -97,6 +94,7 @@ MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
 
 MeetingWindow::~MeetingWindow()
 {
+
 }
 
 void MeetingWindow::refreshList()
@@ -136,8 +134,11 @@ void MeetingWindow::refreshList()
         QString dateSQL;
         dateSQL = QString::number(date.year()) + "/" + QString::number(date.month()) + "/" + QString::number(date.day());
 
-        QString sql("SELECT * FROM Meeting,UsersMeeting WHERE (organizer ='" + QString::number(id_account) + "' OR UsersMeeting.id_user = '" + QString::number(id_account) + "')  AND  date_begin like '" + dateSQL + " %'");
-        query.exec("SELECT * FROM Meeting,UsersMeeting WHERE (organizer ='" + QString::number(id_account) + "' OR UsersMeeting.id_user = '" + QString::number(id_account) + "')  AND  date_begin like '" + dateSQL + " %'");
+        query.prepare("SELECT * FROM Meeting,UsersMeeting WHERE (organizer =:organizer OR UsersMeeting.id_user = :id_user)  AND date_begin like :date_begin");
+        query.bindValue(":organizer", id_account);
+        query.bindValue(":id_user", id_account);
+        query.bindValue(":date_begin", dateSQL + " %");
+        query.exec();
         rec = query.record();
         while(query.next())
         {
@@ -149,7 +150,7 @@ void MeetingWindow::refreshList()
             int no_row_begin = (time_begin.at(0).toInt() - 8) * 2 + time_begin.at(1).toInt() / 30;
             int duration = query.value(3).toInt() / 30;
 
-            for(int pos = 0; pos < duration; pos++){
+            for(int pos = 0; pos < duration; pos++) {
                 Meeting m(query.value(rec.indexOf("id")).toInt(), pos, duration);
 
                 QStandardItem *item = new QStandardItem();
@@ -169,8 +170,6 @@ void MeetingWindow::refreshList()
             view->setSpan(no_row_begin, noCol, duration, 1);
 
             i++;
-
-            qDebug() << query.value(4).toString() << endl;
         }
 
         if(date.dayOfWeek() == 7){ ok = false; } // incrementation

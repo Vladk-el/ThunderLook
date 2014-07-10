@@ -85,7 +85,7 @@ MimeMessage * PopClient::getEmail(int id)
 
         QStringList listLineEmail = responseText.split("\r\n");
 
-        while(listLineEmail.length() < 20)
+        while(listLineEmail.length() < 25)
         {
             sendMessage("RETR " + indice);
             waitForResponse();
@@ -229,9 +229,9 @@ MimeMessage * PopClient::getEmail(int id)
                 int first;
                 if((first = from.indexOf("<") + 1) != - 1)
                 {
-                    fromName = from.mid(0,first);
+                    fromName = from.mid(1,first-3);
                     int last = from.indexOf(">");
-                    from = from.mid(first,last-first);
+                    from = from.mid(first,(last-first));
                 }
 
                 email->setSender(new EmailAddress(from,fromName));
@@ -276,6 +276,7 @@ MimeMessage * PopClient::getEmail(int id)
                 MimeHtml * text = new MimeHtml;
                 text->setHtml(html);
 
+                email->setHtml(html);
                 email->addPart(text);
             }
 
@@ -337,6 +338,8 @@ MimeMessage * PopClient::getEmail(int id)
 
                 MimeText * text = new MimeText;
                 text->setText(plain);
+
+                email->setText(plain);
                 email->addPart(text);
             }
         }
