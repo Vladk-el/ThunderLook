@@ -10,6 +10,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPixmap>
+#include <QColor>
+#include <QPainter>
 
 class PreviewedEmail : public QWidget
 {
@@ -35,6 +37,7 @@ class PreviewedEmail : public QWidget
         void mousePressEvent(QMouseEvent *);
         void enterEvent(QEvent *);
         void leaveEvent(QEvent *);
+        void paintEvent(QPaintEvent *);
 
     private:
         // MimeMessage

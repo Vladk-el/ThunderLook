@@ -30,6 +30,7 @@
 #include <QStringList>
 #include <QSettings>
 #include <QResizeEvent>
+#include <QScrollArea>
 
 
 class MainFrame : public QMainWindow

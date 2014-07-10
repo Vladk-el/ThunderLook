@@ -8,8 +8,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QList>
-
 #include <QPainter>
+#include <QScrollArea>
 
 class WidgetPreviewed : public QWidget
 {
@@ -26,6 +26,7 @@ class WidgetPreviewed : public QWidget
         void paintEvent(QPaintEvent *);
 
     private:
+        QWidget * container;
         QVBoxLayout * layout_previewed;
 
         QList<PreviewedEmail *> * previewed;

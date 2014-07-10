@@ -67,7 +67,7 @@ void PreviewedEmail::mousePressEvent(QMouseEvent * event){
     emit sayYourId(this->indice);
 
     QPalette p;
-    p.setColor(QPalette::Background, Qt::blue);
+    p.setColor(QPalette::Background, QColor(213, 229, 242));
     setAutoFillBackground(true);
     setPalette(p);
 
@@ -80,7 +80,7 @@ void PreviewedEmail::enterEvent(QEvent * event){
 
     if(!isSelected){
         QPalette p;
-        p.setColor(QPalette::Background, Qt::gray);
+        p.setColor(QPalette::Background, QColor(229, 238, 248));
         setAutoFillBackground(true);
         setPalette(p);
     }
@@ -111,3 +111,11 @@ void PreviewedEmail::setUnselected(){
     isSelected = false;
 }
 
+void PreviewedEmail::paintEvent(QPaintEvent * event){
+
+    QPainter painter(this);
+
+    painter.drawRoundedRect(0,0,width()-1, height()-1,0,0);
+
+    QWidget::paintEvent(event);
+}

@@ -109,8 +109,8 @@ void MainFrame::setLayouts(){
 
     widget_previewed = new WidgetPreviewed(messages);
 
-    widget_previewed->setMaximumWidth(4*this->width()/10);
-    widget_previewed->setMinimumWidth(3*this->width()/10);
+    widget_previewed->setMaximumWidth(3*this->width()/10);
+    widget_previewed->setMinimumWidth(2*this->width()/10);
 
     connect(widget_previewed, SIGNAL(sayMyChildrenSelectedId(int)), this, SLOT(slot_get_email_indice(int)));
 
@@ -129,7 +129,7 @@ void MainFrame::setLayouts(){
     layout_detailled->addWidget(detailledEmail);
 
     widget_detailled->setLayout(layout_detailled);
-    widget_previewed->setMaximumWidth(5*this->width()/10);
+    widget_detailled->setMaximumWidth(6*this->width()/10);
 
 
     layout_main->addWidget(view_list_folders);
@@ -154,8 +154,8 @@ void MainFrame::setSlotsConnexions(){
 void MainFrame::resizeEvent(QResizeEvent * event){
     cout << "Size changed !!!" << endl;
     view_list_folders->setMaximumWidth(this->width()/10);
-    widget_previewed->setMaximumWidth(3*this->width()/10);
-    widget_previewed->setMaximumWidth(6*this->width()/10);
+    //widget_previewed->setMaximumWidth(3*this->width()/10);
+    widget_detailled->setMaximumWidth(6*this->width()/10);
 }
 
 QSettings * MainFrame::getSettings(){

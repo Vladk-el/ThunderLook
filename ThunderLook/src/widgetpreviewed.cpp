@@ -2,19 +2,28 @@
 
 WidgetPreviewed::WidgetPreviewed(QList<MimeMessage *> & messages)
 {
+    container = new QWidget;
     previewed = new QList<PreviewedEmail *>;
 
     layout_previewed = new QVBoxLayout;
 
         for(int i = 0; i < messages.length(); i++){
                 previewed->append(new PreviewedEmail(messages.at(i), i));
+                //previewed->at(i)->setMinimumWidth(container->width()-5);
                 layout_previewed->addWidget(previewed->at(i));
                 connect(previewed->at(i), SIGNAL(sayYourId(int)), this, SLOT(getMyChildrensId(int)));
             }
 
         layout_previewed->addStretch(1);
 
-    setLayout(layout_previewed);
+    container->setLayout(layout_previewed);
+
+    QScrollArea * sa = new QScrollArea;
+    sa->setWidget(container);
+
+    QVBoxLayout * layout = new QVBoxLayout;
+    layout->addWidget(sa);
+    setLayout(layout);
 
     QPalette p;
     p.setColor(QPalette::Background, Qt::white);
