@@ -97,15 +97,53 @@ void MainFrame::setLayouts(){
 
     // Folders
     QStringList folders;
-    folders << "Folder1" << "Folder2" << "Folder3" << "Folder4" ;
+
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("database.db");
+
+    if (!db.open())
+    {
+        qDebug() << "Impossible de se connecter à la base de données." << endl;
+        return;
+    }
+
+    QSqlQuery *req = new QSqlQuery();
+    req->prepare("SELECT * FROM Folder");
+    req->exec();
+    QSqlRecord rec = req->record();
+
+    while(req->next())
+    {
+        if(req->value(rec.indexOf("name")).toString().contains("Inbox"))
+        {
+            /*QSqlQuery *reqCount = new QSqlQuery();
+            reqCount->prepare("SELECT COUNT(id_email) FROM Emails WHERE isRead = 1 AND id_folder = 1");
+            reqCount->exec();
+            reqCount->next();*/
+
+            // QString value(req->value(rec.indexOf("name")).toString() + " (" + reqCount->value(0).toString() + ")");
+            QString value(req->value(rec.indexOf("name")).toString());
+
+            folders << value;
+        }
+
+        else
+        {
+            folders << req->value(rec.indexOf("name")).toString();
+        }
+    }
+
+    // folders << "Folder1" << "Folder2" << "Folder3" << "Folder4" ;
+
     model_folders = new QStringListModel(folders);
     view_list_folders = new QListView;
     view_list_folders->setModel(model_folders);
     view_list_folders->setMaximumWidth(this->width()/10);
+    view_list_folders->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     getEmails();
     SqlLiteHelper * helper = new SqlLiteHelper;
-    messages = helper->getAllEmails();
+    messages = helper->getAllEmails(1);
 
     widget_previewed = new WidgetPreviewed(messages);
 
@@ -181,7 +219,6 @@ void MainFrame::slot_new_meeting(){
     //meeting->show();
 
     Contact *contact = new Contact;
-    contact->show();
 }
 
 void MainFrame::slot_configure_account(){
@@ -199,6 +236,13 @@ void MainFrame::slot_launch(){
 void MainFrame::slot_get_email_indice(int indice){
     cout << "indice : " << indice << endl;
     cout << "messages.size() : " << messages.size() << endl;
+
+    /*// Update database
+    QSqlQuery *req = new QSqlQuery();
+    req->prepare("UPDATE Emails SET isRead = :isRead WHERE indice = :indice");
+    req->bindValue(":isRead",1);
+    req->bindValue(":indice",messages.at(indice)->getIndice());
+    req->exec();*/
 
     detailledEmail->update(messages.at(indice));
 }
@@ -235,7 +279,7 @@ bool MainFrame::getEmails()
     {
         try
         {
-            slh->insertEmail(emails.at(i));
+            slh->insertEmail(emails.at(i),1);
             qDebug() << "Numero du message :" << i+1 << endl << emails.at(i)->getSubject() << endl;
         }
         catch(exception e)

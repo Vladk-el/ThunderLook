@@ -106,6 +106,9 @@ class MainFrame : public QMainWindow
         // DetailledEmail
         DetailledEmail * detailledEmail;
 
+        // Database
+        QSqlDatabase db;
+
 };
 
 #endif // MAINFRAME_H

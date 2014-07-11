@@ -2,6 +2,7 @@
 #define SENDNEWEMAIL_H
 
 #include "../includes/smtpClient/src/SmtpMime"
+#include "../includes/SQL/sqllitehelper.h"
 
 #include <iostream>
 #include <QApplication>
