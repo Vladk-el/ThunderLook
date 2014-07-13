@@ -15,7 +15,7 @@ bool SqlLiteHelper::insertUser(QString addr)
 
 }
 
-QList<MimeMessage *> SqlLiteHelper::getAllEmails()
+QList<MimeMessage *> SqlLiteHelper::getAllEmails(int id_folder)
 {
     QList<MimeMessage *> emails;
 
@@ -32,7 +32,7 @@ QList<MimeMessage *> SqlLiteHelper::getAllEmails()
     QSqlQuery query;
     QSqlQuery queryAttachment;
 
-    query.exec("SELECT * FROM Emails");
+    query.exec("SELECT * FROM Emails WHERE id_folder = '" + QString::number(id_folder) + "'");
 
     while (query.next())
     {
@@ -105,7 +105,7 @@ QList<MimeMessage *> SqlLiteHelper::getAllEmails()
     return emails;
 }
 
-bool SqlLiteHelper::insertEmail(MimeMessage * mail)
+bool SqlLiteHelper::insertEmail(MimeMessage * mail,int id_folder)
 {
     if (mail->getSender().getAddress() != "")
     {
@@ -123,14 +123,16 @@ bool SqlLiteHelper::insertEmail(MimeMessage * mail)
         QSqlQuery query;
 
         // INSERT EMAIL
-        query.prepare("INSERT INTO Emails (indice, subject, date,content,text,html) "
-                      "VALUES (:indice, :subject, :date,:content,:text,:html)");
+        query.prepare("INSERT INTO Emails (indice, subject, date,content,text,html,id_folder) "
+                      "VALUES (:indice, :subject, :date,:content,:text,:html,:id_folder)");
         query.bindValue(":indice", mail->getIndice());
         query.bindValue(":subject", mail->getSubject());
         query.bindValue(":date",mail->getDate());
         query.bindValue(":content", mail->getContent().toString());
         query.bindValue(":text", mail->getText());
         query.bindValue(":html", mail->getHtml());
+        query.bindValue(":id_folder", QString::number(id_folder));
+        // query.bindValue(":isRead", QString::number(0));
         query.exec();
 
         QString test(query.lastError().text());

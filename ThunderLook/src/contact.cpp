@@ -6,14 +6,10 @@ Contact::Contact(QWidget *parent) :
     QDialog(parent)
 {
     setFixedWidth(600);
-    setWindowTitle("Planifier une réunion");
+    setWindowTitle("Contacts");
 
-    db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("188.165.125.160");
-    db.setPort(2981);
-    db.setDatabaseName("thunderlook");
-    db.setUserName("esgi");
-    db.setPassword("esgi");
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("database.db");
 
     if (!db.open())
     {
@@ -25,7 +21,7 @@ Contact::Contact(QWidget *parent) :
     listView_users->setEditTriggers(0);
 
     QSqlQuery query;
-    query.exec("SELECT * FROM Contacts WHERE");
+    query.exec("SELECT * FROM Contacts");
 
     modelListUsers = new QStandardItemModel();
 
@@ -56,14 +52,23 @@ Contact::Contact(QWidget *parent) :
     list_users->setFixedWidth(320);
     form_list_users = new QFormLayout();
     form_list_users->addRow("Liste des contacts : ", listView_users);
+
     list_users->setLayout(form_list_users);
 
     name = new QLineEdit();
+    firstname = new QLineEdit();
+    city = new QLineEdit();
+    tel = new QLineEdit();
+    fax = new QLineEdit();
     addr = new QLineEdit();
 
     add_user = new QGroupBox("Ajouter un contact");
     form_add_user = new QFormLayout();
     form_add_user->addRow("Nom : ", name);
+    form_add_user->addRow("Prénom : ", firstname);
+    form_add_user->addRow("Ville : ", city);
+    form_add_user->addRow("Numéro de téléphone : ", tel);
+    form_add_user->addRow("Numéro de fax : ", fax);
     form_add_user->addRow("Adresse email : ", addr);
     add_user->setLayout(form_add_user);
 
@@ -85,4 +90,43 @@ Contact::Contact(QWidget *parent) :
     layout_main->addLayout(layout_users);
 
     setLayout(layout_main);
+
+    connect(btn_add_user, SIGNAL(clicked()), this, SLOT(addUser()));
+    show();
+}
+
+void Contact::addUser()
+{
+    QSqlQuery query;
+
+    query.prepare("INSERT INTO Contacts (name,address,firstname,city,fax,tel) "
+                  "VALUES (:name,:address,:firstname,:city,:fax,:tel)");
+    query.bindValue(":name", name->text());
+    query.bindValue(":address", addr->text());
+    query.bindValue(":firstname", firstname->text());
+    query.bindValue(":city", city->text());
+    query.bindValue(":fax",fax->text());
+    query.bindValue(":tel", tel->text());
+    query.exec();
+
+    query.exec("SELECT * FROM Contacts");
+    modelListUsers = new QStandardItemModel();
+
+    int index = 0;
+    while(query.next())
+    {
+        User user(query.value(1).toInt(),QString(query.value(2).toString()));
+
+        QStandardItem *item = new QStandardItem();
+        item->setText(user.address());
+
+        QVariant data;
+        data.setValue(user);
+        item->setData(data);
+
+        modelListUsers->setItem(index,item);
+        index++;
+    }
+
+    listView_users->setModel(modelListUsers);
 }

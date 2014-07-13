@@ -31,16 +31,20 @@ private:
     QFormLayout *form_list_users;
     QFormLayout *form_add_user;
 
-
     QStandardItemModel *modelListUsers;
     QSqlDatabase db;
 
+    QLineEdit *city;
+    QLineEdit *fax;
+    QLineEdit *tel;
+    QLineEdit *firstname;
     QLineEdit *name;
     QLineEdit *addr;
 
 signals:
 
 public slots:
+    void addUser();
 
 };
 

@@ -13,16 +13,16 @@ using namespace std;
 class SqlLiteHelper : public QObject
 {
     enum RecipientType {
-        To,                 // primary
-        Cc,                 // carbon copy
-        Bcc                 // blind carbon copy
+        To,
+        Cc,
+        Bcc
     };
 
 public:
     explicit SqlLiteHelper(QObject *parent = 0);
     bool insertUser(QString addr);
-    bool insertEmail(MimeMessage * mail);
-    QList<MimeMessage *> getAllEmails();
+    bool insertEmail(MimeMessage * mail,int id_folder);
+    QList<MimeMessage *> getAllEmails(int id_folder);
     QSqlDatabase db;
 };
 

@@ -78,8 +78,6 @@ void SendNewEmail::verifyLineAddress(QLineEdit * line){
 void SendNewEmail::send(){
     cout << "send()" << endl;
 
-    //SmtpClient * smtp = NULL;
-
     if(settings->value("Send/smtp_security").toInt() == 1)
         smtp = new SmtpClient(settings->value("Send/smtp_server").toString(), settings->value("Send/smtp_port").toInt(), SmtpClient::SslConnection);
     else
@@ -107,6 +105,18 @@ void SendNewEmail::send(){
     text->setText(text_content->toPlainText());
 
     message.addPart(text);
+
+    int random = qrand() % ((999999 + 1) - 1) + 1;
+
+    message.setIndice(QString::number(random));
+    message.setText(text_content->toPlainText());
+    message.setHtml(text_content->toPlainText());
+
+    QDateTime dateTime = QDateTime::currentDateTime();
+    message.setDate(dateTime.toString());
+
+    SqlLiteHelper * slh = new SqlLiteHelper();
+    slh->insertEmail(&message,2);
 
     smtp->connectToHost();
     smtp->login();
