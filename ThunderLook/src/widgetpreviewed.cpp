@@ -19,6 +19,7 @@ WidgetPreviewed::WidgetPreviewed(QList<MimeMessage *> & messages)
     container->setLayout(layout_previewed);
 
     QScrollArea * sa = new QScrollArea;
+    sa->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     sa->setWidget(container);
 
     QVBoxLayout * layout = new QVBoxLayout;

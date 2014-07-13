@@ -42,6 +42,7 @@ class DetailledEmail : public QWidget
         QLabel * label_sender;
         QLabel * label_date;
         QLabel * label_to;
+        QLabel * label_cc;
         QLabel * label_attachement;
 
         QTextEdit * label_corps;

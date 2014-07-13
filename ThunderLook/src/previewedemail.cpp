@@ -27,6 +27,8 @@ PreviewedEmail::PreviewedEmail(MimeMessage * message, int indice)
 
 void PreviewedEmail::setConstraints(){
     setMaximumHeight(50);
+    setMaximumWidth(320);
+    setFixedWidth(320);
     QPalette p;
     p.setColor(QPalette::Background, Qt::white);
     setAutoFillBackground(true);
@@ -115,7 +117,7 @@ void PreviewedEmail::paintEvent(QPaintEvent * event){
 
     QPainter painter(this);
 
-    painter.drawRoundedRect(0,0,width()-1, height()-1,0,0);
+    painter.drawRoundedRect(0,0,width()- 1, height()- 1,0,0);
 
     QWidget::paintEvent(event);
 }
