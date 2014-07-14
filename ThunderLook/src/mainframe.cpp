@@ -217,13 +217,22 @@ void MainFrame::slot_new_mail(){
 
 void MainFrame::slot_refresh_mails(){
     cout << "Slot refresh mail" << endl;
+
+    //getEmails();
+    SqlLiteHelper * helper = new SqlLiteHelper;
+    QList<MimeMessage *> messages_refresh = helper->getAllEmails(1);
+
+    if(messages.size() < messages_refresh.size()){
+        widget_previewed->update(messages_refresh);
+    }
+    messages = helper->getAllEmails(1);
 }
 
 void MainFrame::slot_new_meeting(){
     //MeetingWindow *meeting = new MeetingWindow;
     //meeting->show();
 
-    Contact *contact = new Contact;
+    Contact * contact = new Contact;
 }
 
 void MainFrame::slot_configure_account(){

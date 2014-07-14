@@ -111,6 +111,8 @@ class MainFrame : public QMainWindow
         // Database
         QSqlDatabase db;
 
+        // SelectedEmail
+
 };
 
 #endif // MAINFRAME_H

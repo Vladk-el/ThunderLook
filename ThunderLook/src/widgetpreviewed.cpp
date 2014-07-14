@@ -32,6 +32,22 @@ WidgetPreviewed::WidgetPreviewed(QList<MimeMessage *> & messages)
     setPalette(p);
 }
 
+
+void WidgetPreviewed::update(QList<MimeMessage *> & messages){
+
+    for(int i = previewed->size() -1; i > -1; i--){
+        layout_previewed->removeWidget(previewed->at(i));
+        previewed->removeAt(i);
+    }
+
+    for(int i = 0; i < messages.length(); i++){
+            previewed->append(new PreviewedEmail(messages.at(i), i));
+            layout_previewed->addWidget(previewed->at(i));
+            connect(previewed->at(i), SIGNAL(sayYourId(int)), this, SLOT(getMyChildrensId(int)));
+        }
+}
+
+
 void WidgetPreviewed::getMyChildrensId(int indice){
 
     emit sayMyChildrenSelectedId(indice);
