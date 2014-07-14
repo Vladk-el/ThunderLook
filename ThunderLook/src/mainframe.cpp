@@ -182,6 +182,7 @@ void MainFrame::setLayouts(){
 
     widget_central->setLayout(layout_main);
     setCentralWidget(widget_central);
+
 }
 
 void MainFrame::setSlotsConnexions(){
@@ -192,6 +193,9 @@ void MainFrame::setSlotsConnexions(){
     connect(action_new_meeting, SIGNAL(triggered()), this, SLOT(slot_new_meeting()));
     connect(action_configure_account, SIGNAL(triggered()), this, SLOT(slot_configure_account()));
     connect(action_contact, SIGNAL(triggered()), this, SLOT(slot_contacts()));
+
+    connect(view_list_folders->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(slot_update_from_folder(QItemSelection)));
+
 
 }
 
@@ -221,15 +225,16 @@ void MainFrame::slot_refresh_mails(){
 
     //getEmails();
     SqlLiteHelper * helper = new SqlLiteHelper;
-    QList<MimeMessage *> messages_refresh = helper->getAllEmails(1);
+    QList<MimeMessage *> messages_refresh = helper->getAllEmails(selected_folder_indice);
 
-    //if(messages.size() < messages_refresh.size()){
+    if(messages.size() != messages_refresh.size()){
         widget_previewed->update(messages_refresh);
-    //}
-    selected_email_indice = selected_email_indice + (messages_refresh.size() - messages.size());
 
-    messages = helper->getAllEmails(1);
-    widget_previewed->updateMyChild(selected_email_indice);
+        selected_email_indice = selected_email_indice + (messages_refresh.size() - messages.size());
+        messages = helper->getAllEmails(1);
+        widget_previewed->updateMyChild(selected_email_indice);
+    }
+
 }
 
 void MainFrame::slot_new_meeting(){
@@ -269,6 +274,17 @@ void MainFrame::slot_get_email_indice(int indice){
 
     detailledEmail->update(messages.at(indice));
 }
+
+void MainFrame::slot_update_from_folder(QItemSelection & selection){
+
+    if(!selection.indexes().isEmpty()){
+        cout << "Folder indice : " << selection.indexes().first().row() << endl;
+        selected_folder_indice = selection.indexes().first().row();
+        slot_refresh_mails();
+    }
+}
+
+
 
 bool MainFrame::getEmails()
 {

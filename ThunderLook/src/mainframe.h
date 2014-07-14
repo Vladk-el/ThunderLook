@@ -68,6 +68,7 @@ class MainFrame : public QMainWindow
         void slot_contacts();
         void slot_launch();
         void slot_get_email_indice(int);
+        void slot_update_from_folder(QItemSelection &);
 
     private:
         // QSettings
@@ -111,8 +112,9 @@ class MainFrame : public QMainWindow
         // Database
         QSqlDatabase db;
 
-        // SelectedEmail
+        // SelectedRessources
         int selected_email_indice;
+        int selected_folder_indice;
 };
 
 #endif // MAINFRAME_H
