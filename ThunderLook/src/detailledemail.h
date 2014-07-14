@@ -2,6 +2,7 @@
 #define DETAILLEDEMAIL_H
 
 #include "../includes/smtpClient/src/mimemessage.h"
+#include "sendnewemail.h"
 
 #include <iostream>
 
@@ -11,6 +12,7 @@
 #include <QLabel>
 #include <QTextEdit>
 #include <QPixmap>
+#include <QPushButton>
 
 class DetailledEmail : public QWidget
 {
@@ -28,6 +30,7 @@ class DetailledEmail : public QWidget
     signals:
 
     public slots:
+        void slot_answer();
 
     private:
         // MimeMessage
@@ -36,6 +39,7 @@ class DetailledEmail : public QWidget
         // Layouts
         QVBoxLayout * layout_main;
         QFormLayout * layout_top;
+        QHBoxLayout * layout_bottom;
 
         // Labels
         QLabel * label_object;
@@ -46,6 +50,9 @@ class DetailledEmail : public QWidget
         QLabel * label_attachement;
 
         QTextEdit * label_corps;
+
+        // QPushButton
+        QPushButton * answer;
 
 
 };

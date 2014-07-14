@@ -53,8 +53,18 @@ void DetailledEmail::setIHM(MimeMessage * message){
         label_corps = new QTextEdit(message->getContent().toString());
             label_corps->setEnabled(false);
 
+        layout_bottom = new QHBoxLayout;
+            layout_bottom->setAlignment(Qt::AlignRight);
+            answer = new QPushButton(tr("Répondre"));
+
+            layout_bottom->addWidget(answer);
+
+
         layout_main->addLayout(layout_top);
         layout_main->addWidget(label_corps);
+        layout_main->addLayout(layout_bottom);
+
+        QObject::connect(answer, SIGNAL(clicked()), this, SLOT(slot_answer()));
 
         update(message);
 
@@ -88,4 +98,11 @@ void DetailledEmail::update(MimeMessage * message){
 
     label_attachement->setText("label attachement");
     label_corps->setText(message->getHtml());
+}
+
+
+void DetailledEmail::slot_answer(){
+    cout << "Slot answer mail" << endl;
+    SendNewEmail * new_mail = new SendNewEmail(label_sender->text(), label_cc->text(), label_object->text(), label_corps->toPlainText());
+    new_mail->show();
 }

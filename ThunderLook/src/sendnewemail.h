@@ -25,11 +25,13 @@ class SendNewEmail : public QWidget
 
     public:
         SendNewEmail();
+        SendNewEmail(QString, QString, QString, QString);
 
         void setMainIHM();
         void setSlotsConnexions();
         bool isEmailAddress(QString);
         void verifyLineAddress(QLineEdit *);
+        void setContentToAnswer(QString &, QString &, QString &, QString &);
 
     public slots:
         void send();

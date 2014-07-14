@@ -7,6 +7,12 @@ SendNewEmail::SendNewEmail()
     setMainIHM();
 }
 
+SendNewEmail::SendNewEmail(QString to, QString cc, QString obj, QString content)
+{
+    setMainIHM();
+    setContentToAnswer(to, cc, obj, content);
+}
+
 void SendNewEmail::setMainIHM(){
 
     setMinimumSize(1000, 600);
@@ -34,7 +40,7 @@ void SendNewEmail::setMainIHM(){
     layout_top->addLayout(layout_form);
 
 
-    text_content = new QTextEdit;
+    text_content = new QTextEdit();
 
     layout_main->addLayout(layout_top);
     layout_main->addWidget(text_content);
@@ -131,4 +137,12 @@ void SendNewEmail::verifyLineTo(){
 
 void SendNewEmail::verifyLineCopy(){
     verifyLineAddress(line_copy);
+}
+
+void SendNewEmail::setContentToAnswer(QString & to, QString & cc, QString & obj, QString & content){
+
+    line_to->setText(to);
+    line_copy->setText(cc);
+    line_subject->setText("TR: " + obj);
+    text_content->setText("\n\n --------------------------------------- \n\n" + content);
 }
