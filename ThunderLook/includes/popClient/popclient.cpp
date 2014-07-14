@@ -465,7 +465,6 @@ bool PopClient::connectToHost()
 
     if (!socket->waitForConnected(connectionTimeout))
     {
-        throw ErrorResponseException();
         return false;
     }
 
@@ -473,7 +472,6 @@ bool PopClient::connectToHost()
 
     if (responseCode != "+")
     {
-        //throw ErrorResponseException();
         return false;
     }
 
