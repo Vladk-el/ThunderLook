@@ -112,7 +112,7 @@ class MainFrame : public QMainWindow
         QSqlDatabase db;
 
         // SelectedEmail
-
+        int selected_email_indice;
 };
 
 #endif // MAINFRAME_H

@@ -29,6 +29,7 @@ class PreviewedEmail : public QWidget
 
         bool getSelectedState();
         void setUnselected();
+        void setSelected();
 
     signals:
         void sayYourId(int);

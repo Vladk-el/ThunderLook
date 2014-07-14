@@ -47,6 +47,10 @@ void WidgetPreviewed::update(QList<MimeMessage *> & messages){
         }
 }
 
+void WidgetPreviewed::updateMyChild(int indice){
+    previewed->at(indice)->setSelected();
+}
+
 
 void WidgetPreviewed::getMyChildrensId(int indice){
 

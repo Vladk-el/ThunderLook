@@ -40,6 +40,7 @@ void MainFrame::setSettings(){
 
 void MainFrame::setSize(){
     setMinimumSize(1200, 800);
+    selected_email_indice = 0;
 }
 
 void MainFrame::setMenus(){
@@ -222,10 +223,13 @@ void MainFrame::slot_refresh_mails(){
     SqlLiteHelper * helper = new SqlLiteHelper;
     QList<MimeMessage *> messages_refresh = helper->getAllEmails(1);
 
-    if(messages.size() < messages_refresh.size()){
+    //if(messages.size() < messages_refresh.size()){
         widget_previewed->update(messages_refresh);
-    }
+    //}
+    selected_email_indice = selected_email_indice + (messages_refresh.size() - messages.size());
+
     messages = helper->getAllEmails(1);
+    widget_previewed->updateMyChild(selected_email_indice);
 }
 
 void MainFrame::slot_new_meeting(){
@@ -254,6 +258,7 @@ void MainFrame::slot_launch(){
 void MainFrame::slot_get_email_indice(int indice){
     cout << "indice : " << indice << endl;
     cout << "messages.size() : " << messages.size() << endl;
+    selected_email_indice = indice;
 
     // Update database
     /*QSqlQuery *req = new QSqlQuery();

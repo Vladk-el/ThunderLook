@@ -19,6 +19,7 @@ class WidgetPreviewed : public QWidget
         WidgetPreviewed(QList<MimeMessage *> &);
 
         void update(QList<MimeMessage *> &);
+        void updateMyChild(int);
 
     signals:
         void sayMyChildrenSelectedId(int);

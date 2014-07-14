@@ -113,6 +113,15 @@ void PreviewedEmail::setUnselected(){
     isSelected = false;
 }
 
+void PreviewedEmail::setSelected(){
+    QPalette p;
+    p.setColor(QPalette::Background, QColor(213, 229, 242));
+    setAutoFillBackground(true);
+    setPalette(p);
+
+    isSelected = true;
+}
+
 void PreviewedEmail::paintEvent(QPaintEvent * event){
 
     QPainter painter(this);
