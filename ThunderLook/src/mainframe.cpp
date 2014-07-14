@@ -75,16 +75,20 @@ void MainFrame::setActions(){
     action_configure_account = new QAction(tr("Paramètres"), this);
     action_configure_account->setShortcut(QKeySequence("Ctrl+P"));
     menu_account->addAction(action_configure_account);
+
+    // Action contact
+    action_contact = new QAction(tr("&Contacts"), this);
+    menu_account->addAction(action_contact);
 }
 
 void MainFrame::setToolBars(){
 
     toolbar_top = addToolBar("Top");
 
-    //toolbar_top->addAction(action_quit);
     toolbar_top->addAction(action_new_mail);
-    toolbar_top->addAction(action_refresh_mails);
     toolbar_top->addAction(action_new_meeting);
+    toolbar_top->addAction(action_contact);
+    toolbar_top->addAction(action_refresh_mails);
 
     //toolbar_top->setOrientation(Qt::Vertical);
 }
@@ -141,7 +145,7 @@ void MainFrame::setLayouts(){
     view_list_folders->setMaximumWidth(this->width()/10);
     view_list_folders->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    getEmails();
+    //getEmails();
     SqlLiteHelper * helper = new SqlLiteHelper;
     messages = helper->getAllEmails(1);
 
@@ -186,6 +190,7 @@ void MainFrame::setSlotsConnexions(){
     connect(action_refresh_mails, SIGNAL(triggered()), this, SLOT(slot_refresh_mails()));
     connect(action_new_meeting, SIGNAL(triggered()), this, SLOT(slot_new_meeting()));
     connect(action_configure_account, SIGNAL(triggered()), this, SLOT(slot_configure_account()));
+    connect(action_contact, SIGNAL(triggered()), this, SLOT(slot_contacts()));
 
 }
 
@@ -225,6 +230,10 @@ void MainFrame::slot_configure_account(){
     cout << "Slot configure account" << endl;
 
     Settings * settings = new Settings;
+}
+
+void MainFrame::slot_contacts(){
+    cout << "Slot contacts " << endl;
 }
 
 void MainFrame::slot_launch(){

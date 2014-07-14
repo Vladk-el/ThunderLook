@@ -29,18 +29,18 @@ void DetailledEmail::setIHM(MimeMessage * message){
     layout_main = new QVBoxLayout;
 
         layout_top = new QFormLayout;
-            label_object = new QLabel(message->getSubject());
+            label_object = new QLabel("");
                 label_object->setStyleSheet(style_label);
-            label_sender = new QLabel(message->getSender().getAddress());
+            label_sender = new QLabel("");
                 label_sender->setStyleSheet(style_label);
-            label_date = new QLabel(message->getDate());
+            label_date = new QLabel("");
                 label_date->setStyleSheet(style_label);
             label_to = new QLabel("");
                 label_to->setStyleSheet(style_label);
-            label_attachement = new QLabel("label_attachement");
+            label_attachement = new QLabel("");
             label_cc = new QLabel("");
                 label_cc->setStyleSheet(style_label);
-            label_attachement = new QLabel("label_attachement");
+            label_attachement = new QLabel("");
                 label_attachement->setStyleSheet(style_label);
 
             layout_top->addRow(tr("Objet"), label_object);
@@ -55,6 +55,8 @@ void DetailledEmail::setIHM(MimeMessage * message){
 
         layout_main->addLayout(layout_top);
         layout_main->addWidget(label_corps);
+
+        update(message);
 
     setLayout(layout_main);
 }
@@ -85,5 +87,5 @@ void DetailledEmail::update(MimeMessage * message){
     }
 
     label_attachement->setText("label attachement");
-    label_corps->setText(message->getContent().toString());
+    label_corps->setText(message->getHtml());
 }
