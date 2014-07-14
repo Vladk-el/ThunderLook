@@ -117,11 +117,11 @@ void MainFrame::setLayouts(){
         if(req->value(rec.indexOf("name")).toString().contains("Inbox"))
         {
             /*QSqlQuery *reqCount = new QSqlQuery();
-            reqCount->prepare("SELECT COUNT(id_email) FROM Emails WHERE isRead = 1 AND id_folder = 1");
+            reqCount->prepare("SELECT COUNT(id_email) FROM Emails WHERE isRead = 0 AND id_folder = 1");
             reqCount->exec();
             reqCount->next();*/
 
-            // QString value(req->value(rec.indexOf("name")).toString() + " (" + reqCount->value(0).toString() + ")");
+            //QString value(req->value(rec.indexOf("name")).toString() + " (" + reqCount->value(0).toString() + ")");
             QString value(req->value(rec.indexOf("name")).toString());
 
             folders << value;
@@ -237,10 +237,10 @@ void MainFrame::slot_get_email_indice(int indice){
     cout << "indice : " << indice << endl;
     cout << "messages.size() : " << messages.size() << endl;
 
-    /*// Update database
-    QSqlQuery *req = new QSqlQuery();
+    // Update database
+    /*QSqlQuery *req = new QSqlQuery();
     req->prepare("UPDATE Emails SET isRead = :isRead WHERE indice = :indice");
-    req->bindValue(":isRead",1);
+    req->bindValue(":isRead",QString::number(1));
     req->bindValue(":indice",messages.at(indice)->getIndice());
     req->exec();*/
 
