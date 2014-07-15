@@ -30,6 +30,7 @@ void MainFrame::init(){
     setToolBars();
     setLayouts();
     setSlotsConnexions();
+    setTimer();
 
     show();
 }
@@ -41,6 +42,7 @@ void MainFrame::setSettings(){
 void MainFrame::setSize(){
     setMinimumSize(1200, 800);
     selected_email_indice = 0;
+    selected_folder_indice = 1;
 }
 
 void MainFrame::setMenus(){
@@ -163,6 +165,7 @@ void MainFrame::setLayouts(){
 
     if(messages.size() > 0){
         detailledEmail = new DetailledEmail(messages.at(0));
+        widget_previewed->updateMyChild(selected_email_indice);
     }else{
         MimeMessage * test = construct();
         detailledEmail = new DetailledEmail();
@@ -196,8 +199,14 @@ void MainFrame::setSlotsConnexions(){
 
     connect(view_list_folders->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(slot_update_from_folder(QItemSelection)));
 
-
 }
+
+void MainFrame::setTimer(){
+    QTimer * refresh_emails = new QTimer;
+    refresh_emails->setInterval(global_settings->value("Account/user_synchro").toInt() * 1000 * 60);
+    QObject::connect(refresh_emails, SIGNAL(timeout()), this, SLOT(slot_refresh_mails()));
+}
+
 
 void MainFrame::resizeEvent(QResizeEvent * event){
     cout << "Size changed !!!" << endl;

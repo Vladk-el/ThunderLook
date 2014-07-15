@@ -31,6 +31,7 @@
 #include <QSettings>
 #include <QResizeEvent>
 #include <QScrollArea>
+#include <QTimer>
 
 
 class MainFrame : public QMainWindow
@@ -51,6 +52,7 @@ class MainFrame : public QMainWindow
         void setToolBars();
         void setLayouts();
         void setSlotsConnexions();
+        void setTimer();
         bool getEmails();
 
         void resizeEvent(QResizeEvent *);

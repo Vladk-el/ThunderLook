@@ -73,7 +73,7 @@ void DetailledEmail::setIHM(MimeMessage * message){
 
 void DetailledEmail::update(MimeMessage * message){
     label_object->setText(message->getSubject());
-    label_sender->setText(message->getSender().getAddress());
+    label_sender->setText(message->getSender().getName());
     label_date->setText(message->getDate());
     label_to->setText("");
     label_cc->setText("");
