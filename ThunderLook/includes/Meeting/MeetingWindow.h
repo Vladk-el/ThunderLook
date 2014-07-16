@@ -28,6 +28,7 @@ class MeetingWindow : public QDialog
 public:
     explicit MeetingWindow(QWidget *parent = 0);
     ~MeetingWindow();
+    void configSQL();
 
 private slots:
     void refreshList();

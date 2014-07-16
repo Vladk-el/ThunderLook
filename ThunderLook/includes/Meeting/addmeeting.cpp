@@ -284,12 +284,12 @@ void AddMeeting::add()
             query_insert_user.bindValue(":id_user", user.id());
             query_insert_user.bindValue(":present", 0);
             query_insert_user.exec();
+
+            sendEmail(query.value(0).toInt(),dt_begin,user);
         }
 
         id_meeting = query.value(0).toInt();
     }
-
-    sendEmail(id_meeting,dt_begin);
 
     emit notifyRefreshList();
     this->quit();
@@ -323,9 +323,57 @@ void AddMeeting::moveItemToTarget(QListView  *source, QListView  *target)
     }
 }
 
+void AddMeeting::sendEmail(int id_meeting,QString date,User user)
+{
+    global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
 
+    if(global_settings->value("Send/smtp_security").toInt() == 1)
+        smtp = new SmtpClient(global_settings->value("Send/smtp_server").toString(), global_settings->value("Send/smtp_port").toInt(), SmtpClient::SslConnection);
+    else
+        smtp = new SmtpClient(global_settings->value("Send/smtp_server").toString(), global_settings->value("Send/smtp_port").toInt());
 
-void AddMeeting::sendEmail(int id_meeting,QString date)
+    smtp->setUser(global_settings->value("Send/smtp_user").toString());
+    smtp->setPassword(global_settings->value("Send/smtp_password").toString());
+
+    smtp->connectToHost();
+    smtp->login();
+
+    MimeMessage message;
+
+    message.setSender(new EmailAddress(
+                          global_settings->value("Account/user_email").toString(),
+                          global_settings->value("Account/user_name").toString()
+                          ));
+
+    message.addRecipient(new EmailAddress(user.address(), ""));
+    message.setSubject("Participation a une reunion");
+
+    MimeText *text = new MimeText;
+    text->setText("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + QString::number(user.id()) + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + QString::number(user.id()) + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
+
+    MimeHtml * textHTML = new MimeHtml;
+    textHTML->setHtml("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + QString::number(user.id()) + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + QString::number(user.id()) + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
+
+    message.addPart(textHTML);
+    message.addPart(text);
+
+    message.setHtml("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + QString::number(user.id()) + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + QString::number(user.id()) + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
+    message.setText("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + QString::number(user.id()) + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + QString::number(user.id()) + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
+
+    int random = qrand() % ((999999 + 1) - 1) + 1;
+    message.setIndice(QString::number(random));
+
+    QDateTime dateTime = QDateTime::currentDateTime();
+    message.setDate(dateTime.toString());
+
+    SqlLiteHelper * slh = new SqlLiteHelper();
+    slh->insertEmail(&message,2);
+
+    smtp->sendMail(message);
+    smtp->quit();
+}
+
+/*void AddMeeting::sendEmail(int id_meeting,QString date)
 {
     global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
 
@@ -338,9 +386,8 @@ void AddMeeting::sendEmail(int id_meeting,QString date)
     smtp->setPassword(global_settings->value("Send/smtp_password").toString());
 
     QSqlQuery query;
-    QString sql("SELECT * FROM Meeting,Users,UsersMeeting where id_meeting = " + QString::number(id_meeting));
-    query.prepare("SELECT * FROM Meeting,Users,UsersMeeting where id_meeting = :id_meeting AND UsersMeeting.id_user = Users.id AND UsersMeeting.id_meeting = Meeting.id");
-    query.bindValue(":id_meeting", id_meeting);
+    query.prepare("SELECT * FROM Meeting,Users,UsersMeeting where id_meeting = 31 AND UsersMeeting.id_user = Users.id AND UsersMeeting.id_meeting = Meeting.id");
+    //query.bindValue(":id_meeting", id_meeting);
     query.exec();
     QSqlRecord rec = query.record();
 
@@ -372,8 +419,6 @@ void AddMeeting::sendEmail(int id_meeting,QString date)
         message.setHtml("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
         message.setText("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
 
-        smtp->sendMail(message);
-
         int random = qrand() % ((999999 + 1) - 1) + 1;
         message.setIndice(QString::number(random));
 
@@ -382,11 +427,13 @@ void AddMeeting::sendEmail(int id_meeting,QString date)
 
         SqlLiteHelper * slh = new SqlLiteHelper();
         slh->insertEmail(&message,2);
-    }
-    smtp->quit();
 
+        //smtp->sendMail(message);
+    }
+
+    //smtp->quit();
     close();
-}
+}*/
 
 void AddMeeting::moveItemToSource(QListView  *source, QListView  *target)
 {

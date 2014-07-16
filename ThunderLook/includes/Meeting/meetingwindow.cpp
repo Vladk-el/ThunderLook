@@ -11,22 +11,7 @@ MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
 {
     global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
 
-
-    db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName(global_settings->value("SQL/addr_ip").toString());
-    db.setPort(QString(global_settings->value("SQL/port").toString()).toInt());
-    db.setDatabaseName("thunderlook");
-    db.setUserName("esgi");
-    db.setPassword("esgi");
-
-    if (!db.open())
-    {
-        for(int i = 0 ; i < QSqlDatabase::drivers().length() ; i++)
-            qDebug() << QSqlDatabase::drivers().at(i);
-
-        qDebug() << db.lastError().text() << "Impossible de se connecter à la base de données." << endl;
-        return;
-    }
+    configSQL();
 
     global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
 
@@ -100,8 +85,29 @@ MeetingWindow::~MeetingWindow()
 
 }
 
+void MeetingWindow::configSQL()
+{
+    db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName(global_settings->value("SQL/addr_ip").toString());
+    db.setPort(QString(global_settings->value("SQL/port").toString()).toInt());
+    db.setDatabaseName("thunderlook");
+    db.setUserName("esgi");
+    db.setPassword("esgi");
+
+    if (!db.open())
+    {
+        for(int i = 0 ; i < QSqlDatabase::drivers().length() ; i++)
+            qDebug() << QSqlDatabase::drivers().at(i);
+
+        qDebug() << db.lastError().text() << "Impossible de se connecter à la base de données." << endl;
+        return;
+    }
+}
+
 void MeetingWindow::refreshList()
 {
+    configSQL();
+
     view->reset();
     view->clearSpans();
     QDate date = calendar->selectedDate();
