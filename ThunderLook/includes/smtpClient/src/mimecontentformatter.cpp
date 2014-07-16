@@ -18,9 +18,10 @@
 
 #include "mimecontentformatter.h"
 
-MimeContentFormatter::MimeContentFormatter(int max_length) :
-    max_length(max_length)
-{}
+MimeContentFormatter::MimeContentFormatter(int max_length) : max_length(max_length)
+{
+
+}
 
 QString MimeContentFormatter::format(const QString &content, bool quotedPrintable) const {
 

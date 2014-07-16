@@ -20,15 +20,45 @@
 
 /* [1] Constructors and Destructors */
 
+EmailAddress::EmailAddress(){
+    this->address = "test@test.test";
+    this->name = "test";
+}
+
 EmailAddress::EmailAddress(const QString & address, const QString & name)
 {
     this->address = address;
     this->name = name;
 }
 
+EmailAddress::EmailAddress(const EmailAddress & addr){
+    this->address = addr.address;
+    this->name == addr.name;
+}
+
+
 EmailAddress::~EmailAddress()
 {
 
+}
+
+EmailAddress & EmailAddress::operator=(EmailAddress & addr){
+    if(*this != addr){
+        this->address = addr.address;
+        this->name = addr.name;
+    }
+    return *this;
+}
+
+bool EmailAddress::operator ==(EmailAddress & addr){
+    if(this->address == addr.address && this->name == addr.name){
+        return true;
+    }
+    return false;
+}
+
+bool EmailAddress::operator !=(EmailAddress & addr){
+    return !(*this == addr);
 }
 
 /* [1] --- */

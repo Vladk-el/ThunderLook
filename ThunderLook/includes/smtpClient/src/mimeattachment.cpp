@@ -21,9 +21,9 @@
 
 /* [1] Constructors and Destructors */
 
-MimeAttachment::MimeAttachment(QFile *file)
-    : MimeFile(file)
+MimeAttachment::MimeAttachment(QFile *file) : MimeFile(file)
 {
+  
 }
 
 MimeAttachment::MimeAttachment(const QByteArray& stream, const QString& fileName): MimeFile(stream, fileName)
@@ -32,10 +32,38 @@ MimeAttachment::MimeAttachment(const QByteArray& stream, const QString& fileName
     this->filename = fileName;
 }
 
+MimeAttachment::MimeAttachment(const MimeAttachment & ma): MimeFile(ma.stream, ma.filename){
+    this->stream = ma.stream;
+    this->filename = ma.filename;
+    this->file = ma.file;
+}
+
 MimeAttachment::~MimeAttachment()
 {
 
 }
+
+MimeAttachment & MimeAttachment::operator=(MimeAttachment & ma){
+    if(*this != ma){
+        this->stream = ma.stream;
+        this->filename = ma.filename;
+        this->file = ma.file;
+    }
+    return *this;
+}
+
+bool MimeAttachment::operator==(MimeAttachment & ma){
+    if(this->stream == ma.stream && this->filename == ma.filename && this->file == ma.file){
+        return true;
+    }
+    return false;
+}
+
+bool MimeAttachment::operator!=(MimeAttachment & ma){
+    return !(*this == ma);
+}
+
+
 
 const QString & MimeAttachment::getFilename() const
 {

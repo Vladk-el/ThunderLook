@@ -235,7 +235,9 @@ void MainFrame::slot_new_mail(){
 void MainFrame::slot_refresh_mails(){
     cout << "Slot refresh mail" << endl;
 
-    getEmails();
+    if(selected_folder_indice == 1)
+        getEmails();
+
     SqlLiteHelper * helper = new SqlLiteHelper;
     QList<MimeMessage *> messages_refresh = helper->getAllEmails(selected_folder_indice);
 
@@ -244,7 +246,8 @@ void MainFrame::slot_refresh_mails(){
 
         selected_email_indice = selected_email_indice + (messages_refresh.size() - messages.size());
         messages = helper->getAllEmails(selected_folder_indice);
-        widget_previewed->updateMyChild(selected_email_indice);
+        if(messages.size() > selected_email_indice + 1 && selected_email_indice > -1)
+            widget_previewed->updateMyChild(selected_email_indice);
     }
 }
 
