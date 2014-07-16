@@ -34,6 +34,7 @@ class DetailledEmail : public QWidget
 
     public slots:
         void slot_answer();
+        void slot_list_attachements();
 
     private:
         // MimeMessage

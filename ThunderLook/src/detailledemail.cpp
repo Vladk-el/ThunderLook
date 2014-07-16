@@ -67,6 +67,7 @@ void DetailledEmail::setIHM(MimeMessage * message){
         layout_main->addLayout(layout_bottom);
 
         QObject::connect(answer, SIGNAL(clicked()), this, SLOT(slot_answer()));
+        QObject::connect(button_attachement, SIGNAL(clicked()), this, SLOT(slot_list_attachements()));
 
         update(message);
 
@@ -100,16 +101,11 @@ void DetailledEmail::update(MimeMessage * message){
 
     attachements = message->getAttachment();
     cout << "attachement size : " << attachements.size() << endl;
-    label_attachement->setText("label attachement");
+    for(int i = 0; i < attachements.size(); i++)
+        label_attachement->setText(attachements.at(i)->getFilename() + ", ");
     label_corps->setText(message->getHtml());
 }
 
-
-void DetailledEmail::slot_answer(){
-    cout << "Slot answer mail" << endl;
-    SendNewEmail * new_mail = new SendNewEmail(label_sender->text(), label_cc->text(), label_object->text(), label_corps->toPlainText());
-    new_mail->show();
-}
 
 bool DetailledEmail::isAlive(){
     return alive;
@@ -118,3 +114,31 @@ bool DetailledEmail::isAlive(){
 void DetailledEmail::setAlive(){
     alive = true;
 }
+
+void DetailledEmail::slot_answer(){
+    cout << "Slot answer mail" << endl;
+    SendNewEmail * new_mail = new SendNewEmail(label_sender->text(), label_cc->text(), label_object->text(), label_corps->toPlainText());
+    new_mail->show();
+}
+
+void DetailledEmail::slot_list_attachements(){
+    cout << "slot_list_attachements" << endl;
+    if(attachements.size() > 0){
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
