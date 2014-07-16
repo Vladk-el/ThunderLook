@@ -143,12 +143,13 @@ void MeetingWindow::refreshList()
         QString dateSQL;
         dateSQL = QString::number(date.year()) + "/" + QString::number(date.month()) + "/" + QString::number(date.day());
 
-        query.prepare("SELECT * FROM Meeting,UsersMeeting WHERE (organizer =:organizer OR UsersMeeting.id_user = :id_user)  AND date_begin like :date_begin");
+        query.prepare("SELECT * FROM Meeting,UsersMeeting WHERE (organizer =:organizer OR (UsersMeeting.id_user = :id_user AND UsersMeeting.present = 1))  AND date_begin like :date_begin AND UsersMeeting.id_meeting = Meeting.id");
         query.bindValue(":organizer", id_account);
         query.bindValue(":id_user", id_account);
         query.bindValue(":date_begin", dateSQL + " %");
         query.exec();
         rec = query.record();
+
         while(query.next())
         {
             int noCol = date.dayOfWeek() - 1;
