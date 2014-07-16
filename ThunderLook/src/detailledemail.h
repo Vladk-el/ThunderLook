@@ -27,6 +27,9 @@ class DetailledEmail : public QWidget
 
         void update(MimeMessage *);
 
+        bool isAlive();
+        void setAlive();
+
     signals:
 
     public slots:
@@ -53,6 +56,14 @@ class DetailledEmail : public QWidget
 
         // QPushButton
         QPushButton * answer;
+        QPushButton * button_attachement;
+
+        // Attachements
+        QList<MimeAttachment *> attachements;
+
+        bool alive;
+
+
 
 
 };

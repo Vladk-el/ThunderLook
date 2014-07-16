@@ -241,7 +241,8 @@ void MainFrame::slot_refresh_mails(){
     SqlLiteHelper * helper = new SqlLiteHelper;
     QList<MimeMessage *> messages_refresh = helper->getAllEmails(selected_folder_indice);
 
-    if(messages.size() != messages_refresh.size()){
+    //if(messages.size() != messages_refresh.size()){
+    if(messages != messages_refresh){
         widget_previewed->update(messages_refresh);
 
         selected_email_indice = selected_email_indice + (messages_refresh.size() - messages.size());
@@ -286,7 +287,14 @@ void MainFrame::slot_get_email_indice(int indice){
     req->bindValue(":indice",messages.at(indice)->getIndice());
     req->exec();*/
 
-    detailledEmail->update(messages.at(indice));
+    if(!detailledEmail->isAlive()){
+        detailledEmail = new DetailledEmail(messages.at(indice));
+        layout_detailled->addWidget(detailledEmail);
+        widget_detailled->setLayout(layout_detailled);
+    }
+    else{
+        detailledEmail->update(messages.at(indice));
+    }
 }
 
 void MainFrame::slot_update_from_folder(QItemSelection & selection){

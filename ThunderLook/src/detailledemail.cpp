@@ -6,13 +6,14 @@ using namespace std;
 DetailledEmail::DetailledEmail()
 {
     show();
+    alive = false;
 }
 
 DetailledEmail::DetailledEmail(MimeMessage * message){
 
     setConstraints();
     setIHM(message);
-
+    setAlive();
     show();
 
 }
@@ -48,7 +49,8 @@ void DetailledEmail::setIHM(MimeMessage * message){
             layout_top->addRow(tr("Date"), label_date);
             layout_top->addRow(tr("Destinataire(s)"), label_to);
             layout_top->addRow(tr("Destinataire(s) - Cc"), label_cc);
-            layout_top->addRow(tr("Pièce(s) jointe(s)"), label_attachement);
+            button_attachement = new QPushButton(tr("Pièce(s) jointe(s)"));
+            layout_top->addRow(button_attachement, label_attachement);
 
         label_corps = new QTextEdit(message->getContent().toString());
             label_corps->setEnabled(false);
@@ -96,6 +98,8 @@ void DetailledEmail::update(MimeMessage * message){
         }
     }
 
+    attachements = message->getAttachment();
+    cout << "attachement size : " << attachements.size() << endl;
     label_attachement->setText("label attachement");
     label_corps->setText(message->getHtml());
 }
@@ -105,4 +109,12 @@ void DetailledEmail::slot_answer(){
     cout << "Slot answer mail" << endl;
     SendNewEmail * new_mail = new SendNewEmail(label_sender->text(), label_cc->text(), label_object->text(), label_corps->toPlainText());
     new_mail->show();
+}
+
+bool DetailledEmail::isAlive(){
+    return alive;
+}
+
+void DetailledEmail::setAlive(){
+    alive = true;
 }
