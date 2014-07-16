@@ -32,8 +32,13 @@ public:
 
     MimeAttachment(QFile* file);
     MimeAttachment(const QByteArray& stream, const QString& fileName);
+    MimeAttachment(const MimeAttachment &);
 
     ~MimeAttachment();
+
+    MimeAttachment & operator=(MimeAttachment &);
+    bool operator==(MimeAttachment &);
+    bool operator!=(MimeAttachment &);
 
     const QString & getFilename() const;
     void setFilename(const QString & filename);

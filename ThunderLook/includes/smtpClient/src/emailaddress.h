@@ -30,8 +30,13 @@ public:
 
     EmailAddress();
     EmailAddress(const QString & address, const QString & name="");
+    EmailAddress(const EmailAddress &);
 
     ~EmailAddress();
+
+    EmailAddress & operator=(EmailAddress &);
+    bool operator ==(EmailAddress &);
+    bool operator !=(EmailAddress &);
 
     /* [1] --- */
 
