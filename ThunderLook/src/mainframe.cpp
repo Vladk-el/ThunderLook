@@ -301,9 +301,9 @@ bool MainFrame::getEmails()
 {
     SqlLiteHelper * slh = new SqlLiteHelper();
 
-    PopClient * pop = new PopClient("pop.gmail.com",995,PopClient::SslConnection);
-    pop->setUser("oliveira93700@gmail.com");
-    pop->setPassword("Oliveira93");
+    PopClient * pop = new PopClient(global_settings->value("Reception/reception_server").toString(),995,PopClient::SslConnection);
+    pop->setUser(global_settings->value("Reception/reception_user").toString());
+    pop->setPassword(global_settings->value("Reception/reception_password").toString());
 
     if(pop->connectToHost() == true)
         qDebug() << "connectToHost => OK";
