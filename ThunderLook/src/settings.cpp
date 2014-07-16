@@ -33,7 +33,6 @@ void Settings::setMainLayout(){
     setLayout(layout_main);
 }
 
-
 void Settings::setAccountTab(){
     tab_account = new QWidget;
     layout_tab_account = new QVBoxLayout;
@@ -176,6 +175,10 @@ void Settings::save(){
     settings->setValue("Reception/reception_password", line_recept_password->text());
     settings->setValue("Reception/reception_delete_on_server", line_recept_delete_on_server->currentIndex());
     settings->setValue("Reception/reception_security", line_recept_security->currentIndex());
+
+    // Add User
+    SqlLiteHelper * sql = new SqlLiteHelper();
+    sql->insertUser(line_email->text());
 
     close();
 }
