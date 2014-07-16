@@ -34,6 +34,9 @@ class WidgetPreviewed : public QWidget
 
         QList<PreviewedEmail *> * previewed;
 
+        QScrollArea * sa;
+        QVBoxLayout * layout;
+
 };
 
 #endif // WIDGETPREVIEWED_H

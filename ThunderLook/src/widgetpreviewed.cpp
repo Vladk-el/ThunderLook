@@ -18,11 +18,11 @@ WidgetPreviewed::WidgetPreviewed(QList<MimeMessage *> & messages)
 
     container->setLayout(layout_previewed);
 
-    QScrollArea * sa = new QScrollArea;
+    sa = new QScrollArea;
     sa->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     sa->setWidget(container);
 
-    QVBoxLayout * layout = new QVBoxLayout;
+    layout = new QVBoxLayout;
     layout->addWidget(sa);
     setLayout(layout);
 
@@ -40,11 +40,39 @@ void WidgetPreviewed::update(QList<MimeMessage *> & messages){
         previewed->removeAt(i);
     }
 
+    delete layout;
+    qDeleteAll(children());
+
+    /*layout->removeWidget(sa);
+    delete layout_previewed;
+    delete previewed;
+    delete container;
+    delete sa;*/
+
+    container = new QWidget;
+    previewed = new QList<PreviewedEmail *>;
+
+    layout_previewed = new QVBoxLayout;
+
     for(int i = 0; i < messages.length(); i++){
             previewed->append(new PreviewedEmail(messages.at(i), i));
             layout_previewed->addWidget(previewed->at(i));
             connect(previewed->at(i), SIGNAL(sayYourId(int)), this, SLOT(getMyChildrensId(int)));
         }
+
+
+    layout_previewed->addStretch(1);
+
+    container->setLayout(layout_previewed);
+    sa = new QScrollArea;
+    sa->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    sa->setWidget(container);
+
+    layout = new QVBoxLayout;
+    layout->addWidget(sa);
+    setLayout(layout);
+
+
 }
 
 void WidgetPreviewed::updateMyChild(int indice){
