@@ -119,13 +119,13 @@ void SendNewEmail::send(){
     if(listRecipientTo.size() == 1)
     {
         if(line_to->text() != "")
-            message.addRecipient(new EmailAddress(line_to->text(), ""));
+            message.addRecipient(new EmailAddress(line_to->text(), ""),MimeMessage::To);
     }
 
     else
     {
         for(int i = 0 ; i < listRecipientTo.size() - 1 ; i++)
-            message.addRecipient(new EmailAddress(listRecipientTo.at(i), ""));
+            message.addRecipient(new EmailAddress(listRecipientTo.at(i), ""),MimeMessage::To);
     }
 
     QStringList listRecipientCc = line_copy->text().split(";");
@@ -133,13 +133,13 @@ void SendNewEmail::send(){
     if(listRecipientCc.size() == 1)
     {
         if(line_copy->text() != "")
-            message.addCc(new EmailAddress(line_copy->text(), ""));
+            message.addRecipient(new EmailAddress(line_copy->text(), ""),MimeMessage::Cc);
     }
 
     else
     {
         for(int i = 0 ; i < listRecipientCc.size() - 1 ; i++)
-            message.addCc(new EmailAddress(listRecipientCc.at(i), ""));
+            message.addRecipient(new EmailAddress(listRecipientCc.at(i), ""),MimeMessage::Cc);
     }
 
     message.setSubject(line_subject->text());

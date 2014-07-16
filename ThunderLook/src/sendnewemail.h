@@ -35,6 +35,12 @@ class SendNewEmail : public QWidget
         void verifyLineAddress(QLineEdit *);
         void setContentToAnswer(QString &, QString &, QString &, QString &);
 
+        enum RecipientType {
+            To,                 // primary
+            Cc,                 // carbon copy
+            Bcc                 // blind carbon copy
+        };
+
     public slots:
         void addTo();
         void addCopy();
