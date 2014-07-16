@@ -177,7 +177,6 @@ void MainFrame::setLayouts(){
     widget_detailled->setLayout(layout_detailled);
     widget_detailled->setMaximumWidth(6*this->width()/10);
 
-
     layout_main->addWidget(view_list_folders);
     layout_main->addWidget(widget_previewed);
     layout_main->addWidget(widget_detailled);
@@ -185,7 +184,6 @@ void MainFrame::setLayouts(){
 
     widget_central->setLayout(layout_main);
     setCentralWidget(widget_central);
-
 }
 
 void MainFrame::setSlotsConnexions(){
@@ -197,8 +195,14 @@ void MainFrame::setSlotsConnexions(){
     connect(action_configure_account, SIGNAL(triggered()), this, SLOT(slot_configure_account()));
     connect(action_contact, SIGNAL(triggered()), this, SLOT(slot_contacts()));
 
-    connect(view_list_folders->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(slot_update_from_folder(QItemSelection)));
+    connect(view_list_folders->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this, SLOT(handleSelectionChanged(QItemSelection)));
+}
 
+void MainFrame::handleSelectionChanged(const QItemSelection& selection){
+    QModelIndexList items = selection.indexes();
+
+    selected_folder_indice = items.at(0).row() + 1;
+    slot_refresh_mails();
 }
 
 void MainFrame::setTimer(){
@@ -206,7 +210,6 @@ void MainFrame::setTimer(){
     refresh_emails->setInterval(global_settings->value("Account/user_synchro").toInt() * 1000 * 60);
     QObject::connect(refresh_emails, SIGNAL(timeout()), this, SLOT(slot_refresh_mails()));
 }
-
 
 void MainFrame::resizeEvent(QResizeEvent * event){
     cout << "Size changed !!!" << endl;
@@ -232,7 +235,7 @@ void MainFrame::slot_new_mail(){
 void MainFrame::slot_refresh_mails(){
     cout << "Slot refresh mail" << endl;
 
-    //getEmails();
+    getEmails();
     SqlLiteHelper * helper = new SqlLiteHelper;
     QList<MimeMessage *> messages_refresh = helper->getAllEmails(selected_folder_indice);
 
@@ -240,17 +243,14 @@ void MainFrame::slot_refresh_mails(){
         widget_previewed->update(messages_refresh);
 
         selected_email_indice = selected_email_indice + (messages_refresh.size() - messages.size());
-        messages = helper->getAllEmails(1);
+        messages = helper->getAllEmails(selected_folder_indice);
         widget_previewed->updateMyChild(selected_email_indice);
     }
-
 }
 
 void MainFrame::slot_new_meeting(){
-    //MeetingWindow *meeting = new MeetingWindow;
-    //meeting->show();
-
-    Contact * contact = new Contact;
+    MeetingWindow *meeting = new MeetingWindow;
+    meeting->show();
 }
 
 void MainFrame::slot_configure_account(){
@@ -261,6 +261,8 @@ void MainFrame::slot_configure_account(){
 
 void MainFrame::slot_contacts(){
     cout << "Slot contacts " << endl;
+
+    Contact * contact = new Contact;
 }
 
 void MainFrame::slot_launch(){

@@ -71,6 +71,7 @@ class MainFrame : public QMainWindow
         void slot_launch();
         void slot_get_email_indice(int);
         void slot_update_from_folder(QItemSelection &);
+        void handleSelectionChanged(const QItemSelection& selection);
 
     private:
         // QSettings
