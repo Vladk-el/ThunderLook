@@ -14,6 +14,9 @@
 #include <QComboBox>
 #include <QSettings>
 
+
+#include "../includes/SQL/sqllitehelper.h"
+
 class Settings : public QWidget
 {
     Q_OBJECT

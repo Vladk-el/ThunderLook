@@ -12,7 +12,24 @@ SqlLiteHelper::SqlLiteHelper(QObject *parent) :
 
 bool SqlLiteHelper::insertUser(QString addr)
 {
+    QSqlQuery query;
+    QSqlQuery queryAttachment;
 
+    query.exec("SELECT * FROM Users WHERE address = '" + addr + "'");
+
+    int exist = 0;
+    while (query.next())
+    {
+        exist = 1;
+    }
+
+    if(exist == 0)
+    {
+        query.prepare("INSERT INTO Users (address) "
+                      "VALUES (:address)");
+        query.bindValue(":address", addr);
+        query.exec();
+    }
 }
 
 QList<MimeMessage *> SqlLiteHelper::getAllEmails(int id_folder)
