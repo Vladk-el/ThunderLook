@@ -13,6 +13,10 @@
 #include <QTextEdit>
 #include <QPixmap>
 #include <QPushButton>
+#include <QTextBrowser>
+
+#include <QDesktopServices>
+#include <QUrl>
 
 class DetailledEmail : public QWidget
 {
@@ -35,6 +39,7 @@ class DetailledEmail : public QWidget
     public slots:
         void slot_answer();
         void slot_list_attachements();
+        void lienHypertexte(const QUrl &);
 
     private:
         // MimeMessage
@@ -53,7 +58,7 @@ class DetailledEmail : public QWidget
         QLabel * label_cc;
         QLabel * label_attachement;
 
-        QTextEdit * label_corps;
+        QTextBrowser * label_corps;
 
         // QPushButton
         QPushButton * answer;
