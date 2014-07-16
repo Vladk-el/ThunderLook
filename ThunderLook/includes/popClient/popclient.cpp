@@ -101,7 +101,7 @@ MimeMessage * PopClient::getEmail(int id)
 
                 listLineEmail += response.split("\r\n");
 
-                if(listLineEmail.at(listLineEmail.size() - 2) == ".");
+                if(QString::compare(test, ".") == 0)
                     break;
             }
         }
