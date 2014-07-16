@@ -9,9 +9,12 @@ Q_DECLARE_METATYPE(Meeting);
 
 MeetingWindow::MeetingWindow(QWidget *parent) : QDialog(parent)
 {
+    global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
+
+
     db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("188.165.125.160");
-    db.setPort(2981);
+    db.setHostName(global_settings->value("SQL/addr_ip").toString());
+    db.setPort(QString(global_settings->value("SQL/port").toString()).toInt());
     db.setDatabaseName("thunderlook");
     db.setUserName("esgi");
     db.setPassword("esgi");

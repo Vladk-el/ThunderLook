@@ -19,6 +19,7 @@
 #include <QLineEdit>
 
 #include "../smtpClient/src/smtpclient.h"
+#include "../smtpClient/src/smtpclient.h"
 #include "user.h"
 #include "room.h"
 

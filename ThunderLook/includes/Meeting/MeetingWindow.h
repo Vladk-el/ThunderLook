@@ -17,6 +17,7 @@
 #include <QtSql>
 
 #include "../smtpClient/src/smtpclient.h"
+#include "../smtpClient/src/smtpclient.h"
 #include "meeting.h"
 #include "detailmeeting.h"
 

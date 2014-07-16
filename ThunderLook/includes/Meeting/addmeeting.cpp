@@ -15,8 +15,11 @@ AddMeeting::AddMeeting(QWidget *parent, int account_id) : QDialog(parent)
     setWindowTitle("Planifier une réunion");
 
     db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("188.165.125.160");
-    db.setPort(2981);
+
+    global_settings = new QSettings("../Thunderlook/data/settings/settings.ini", QSettings::IniFormat);
+
+    db.setHostName(global_settings->value("SQL/addr_ip").toString());
+    db.setPort(QString(global_settings->value("SQL/port").toString()).toInt());
     db.setDatabaseName("thunderlook");
     db.setUserName("esgi");
     db.setPassword("esgi");
