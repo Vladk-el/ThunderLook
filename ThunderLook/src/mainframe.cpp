@@ -148,7 +148,7 @@ void MainFrame::setLayouts(){
     view_list_folders->setMaximumWidth(this->width()/10);
     view_list_folders->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    //getEmails();
+    getEmails();
     SqlLiteHelper * helper = new SqlLiteHelper;
     messages = helper->getAllEmails(1);
 

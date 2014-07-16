@@ -18,6 +18,8 @@
 #include <QLabel>
 #include <QSettings>
 
+#include "addrecipients.h"
+
 class SendNewEmail : public QWidget
 {
 
@@ -34,6 +36,8 @@ class SendNewEmail : public QWidget
         void setContentToAnswer(QString &, QString &, QString &, QString &);
 
     public slots:
+        void addTo();
+        void addCopy();
         void send();
         void verifyLineTo();
         void verifyLineCopy();
