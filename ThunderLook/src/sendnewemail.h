@@ -18,6 +18,8 @@
 #include <QLabel>
 #include <QSettings>
 
+#include "addrecipients.h"
+
 class SendNewEmail : public QWidget
 {
 
@@ -33,7 +35,15 @@ class SendNewEmail : public QWidget
         void verifyLineAddress(QLineEdit *);
         void setContentToAnswer(QString &, QString &, QString &, QString &);
 
+        enum RecipientType {
+            To,                 // primary
+            Cc,                 // carbon copy
+            Bcc                 // blind carbon copy
+        };
+
     public slots:
+        void addTo();
+        void addCopy();
         void send();
         void verifyLineTo();
         void verifyLineCopy();

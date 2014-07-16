@@ -14,6 +14,7 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql>
 
+#include "../SQL/sqllitehelper.h"
 #include "../../src/settings.h"
 #include "../smtpClient/src/smtpclient.h"
 #include "user.h"

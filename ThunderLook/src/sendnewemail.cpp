@@ -39,7 +39,6 @@ void SendNewEmail::setMainIHM(){
     layout_top->addWidget(button_send);
     layout_top->addLayout(layout_form);
 
-
     text_content = new QTextEdit();
 
     layout_main->addLayout(layout_top);
@@ -53,12 +52,27 @@ void SendNewEmail::setMainIHM(){
 
 void SendNewEmail::setSlotsConnexions(){
 
+    connect(button_to, SIGNAL(clicked()), this, SLOT(addTo()));
+    connect(button_copy, SIGNAL(clicked()), this, SLOT(addCopy()));
     connect(button_send, SIGNAL(clicked()), this, SLOT(send()));
-    connect(line_to, SIGNAL(textChanged(QString)), this, SLOT(verifyLineTo()));
-    connect(line_copy, SIGNAL(textChanged(QString)), this, SLOT(verifyLineCopy()));
+
+    //connect(line_to, SIGNAL(textChanged(QString)), this, SLOT(verifyLineTo()));
+    //connect(line_copy, SIGNAL(textChanged(QString)), this, SLOT(verifyLineCopy()));
 }
 
-bool SendNewEmail::isEmailAddress(QString addr){
+void SendNewEmail::addTo()
+{
+    AddRecipients * addR = new AddRecipients(*line_to);
+    addR->show();
+}
+
+void SendNewEmail::addCopy()
+{
+    AddRecipients * addR = new AddRecipients(*line_copy);
+    addR->show();
+}
+
+/*bool SendNewEmail::isEmailAddress(QString addr){
     if ( addr.length() == 0 ) return false;
 
     QString strPatt = "\\b[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Za-z]{2,4}\\b";
@@ -78,7 +92,7 @@ void SendNewEmail::verifyLineAddress(QLineEdit * line){
         palette.setColor(QPalette::Text,Qt::green);
         line->setPalette(palette);
     }
-}
+}*/
 
 // Slots
 void SendNewEmail::send(){
@@ -100,17 +114,44 @@ void SendNewEmail::send(){
                           )
                       );
 
-    message.addRecipient(new EmailAddress(line_to->text(), ""));
-    if(line_copy->text() != NULL)
-        message.addRecipient(new EmailAddress(line_copy->text(), ""));
+    QStringList listRecipientTo = line_to->text().split(";");
+
+    if(listRecipientTo.size() == 1)
+    {
+        if(line_to->text() != "")
+            message.addRecipient(new EmailAddress(line_to->text(), ""),MimeMessage::To);
+    }
+
+    else
+    {
+        for(int i = 0 ; i < listRecipientTo.size() - 1 ; i++)
+            message.addRecipient(new EmailAddress(listRecipientTo.at(i), ""),MimeMessage::To);
+    }
+
+    QStringList listRecipientCc = line_copy->text().split(";");
+
+    if(listRecipientCc.size() == 1)
+    {
+        if(line_copy->text() != "")
+            message.addRecipient(new EmailAddress(line_copy->text(), ""),MimeMessage::Cc);
+    }
+
+    else
+    {
+        for(int i = 0 ; i < listRecipientCc.size() - 1 ; i++)
+            message.addRecipient(new EmailAddress(listRecipientCc.at(i), ""),MimeMessage::Cc);
+    }
 
     message.setSubject(line_subject->text());
 
     MimeText * text = new MimeText;
-
     text->setText(text_content->toPlainText());
 
+    MimeHtml *html = new MimeHtml();
+    html->setHtml(text_content->toPlainText());
+
     message.addPart(text);
+    message.addPart(html);
 
     int random = qrand() % ((999999 + 1) - 1) + 1;
 
@@ -132,11 +173,11 @@ void SendNewEmail::send(){
 }
 
 void SendNewEmail::verifyLineTo(){
-    verifyLineAddress(line_to);
+    //verifyLineAddress(line_to);
 }
 
 void SendNewEmail::verifyLineCopy(){
-    verifyLineAddress(line_copy);
+    //verifyLineAddress(line_copy);
 }
 
 void SendNewEmail::setContentToAnswer(QString & to, QString & cc, QString & obj, QString & content){

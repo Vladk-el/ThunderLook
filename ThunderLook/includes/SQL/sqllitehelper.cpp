@@ -32,7 +32,8 @@ QList<MimeMessage *> SqlLiteHelper::getAllEmails(int id_folder)
     QSqlQuery query;
     QSqlQuery queryAttachment;
 
-    query.exec("SELECT * FROM Emails WHERE id_folder = '" + QString::number(id_folder) + "'");
+    //query.exec("SELECT * FROM Emails WHERE id_folder = '" + QString::number(id_folder) + "'");
+    query.exec("SELECT * FROM Emails WHERE id_folder = '" + QString::number(id_folder) + "' order by id_email desc");
 
     while (query.next())
     {

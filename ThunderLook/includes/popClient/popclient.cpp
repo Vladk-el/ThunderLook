@@ -102,7 +102,7 @@ MimeMessage * PopClient::getEmail(int id)
                 listLineEmail += response.split("\r\n");
 
                 if(listLineEmail.at(listLineEmail.size() - 2) == ".");
-                break;
+                    break;
             }
         }
 
@@ -138,7 +138,7 @@ MimeMessage * PopClient::getEmail(int id)
                         name = listTo[i].mid(0,first);
 
                         int last = listTo[i].indexOf(">");
-                        listTo[i] = listTo[i].mid(first+1,(last-first) - 2);
+                        listTo[i] = listTo[i].mid(first+1,(last-first) - 1);
                     }
 
                     email->addRecipient(new EmailAddress(listTo[i],name));
@@ -274,6 +274,8 @@ MimeMessage * PopClient::getEmail(int id)
             if(listLineEmail[i].startsWith("Content-Type: text/html")&& !listLineEmail[i].contains("name"))
             {
                 QString html = listLineEmail[i+1];
+                if(html == "Content-Transfer-Encoding: 8bit")
+                    html = "";
 
                 for(int j = i+2 ; j < listLineEmail.length() ; j++)
                 {

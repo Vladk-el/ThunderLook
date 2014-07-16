@@ -369,7 +369,19 @@ void AddMeeting::sendEmail(int id_meeting,QString date)
         message.addPart(textHTML);
         message.addPart(text);
 
+        message.setHtml("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
+        message.setText("<html>Souhaitez-vous participe a la reunion le " + date  + " ? <br/><br/><a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=1'<b>Oui</b></a> &nbsp; <a href='http://188.165.125.160:2980/index.php?id_account=" + query.value(rec.indexOf("id_user")).toString() + "&id_meeting=" + QString::number(id_meeting) + "&update=0'<b>Non</b></a></html>");
+
         smtp->sendMail(message);
+
+        int random = qrand() % ((999999 + 1) - 1) + 1;
+        message.setIndice(QString::number(random));
+
+        QDateTime dateTime = QDateTime::currentDateTime();
+        message.setDate(dateTime.toString());
+
+        SqlLiteHelper * slh = new SqlLiteHelper();
+        slh->insertEmail(&message,2);
     }
     smtp->quit();
 
