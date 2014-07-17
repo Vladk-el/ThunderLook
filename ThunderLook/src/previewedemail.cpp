@@ -50,7 +50,7 @@ void PreviewedEmail::setIHM(MimeMessage * message){
 
         layout_right = new QVBoxLayout;
             label_date = new QLabel(message->getDate());
-            label_attachement = new QLabel("Pièce jointe");
+            label_attachement = new QLabel("");
 
             layout_right->addWidget(label_date);
             layout_right->addWidget(label_attachement);
