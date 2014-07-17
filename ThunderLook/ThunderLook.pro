@@ -71,3 +71,5 @@ RESOURCES += \
 
 OTHER_FILES += \
     data/settings/settings.ini
+
+win32:RC_ICONS += ../Thunderlook/data/img/app/thunderlook.ico
