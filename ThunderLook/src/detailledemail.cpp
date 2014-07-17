@@ -52,8 +52,12 @@ void DetailledEmail::setIHM(MimeMessage * message){
             button_attachement = new QPushButton(tr("Pièce(s) jointe(s)"));
             layout_top->addRow(button_attachement, label_attachement);
 
-        label_corps = new QTextEdit(message->getContent().toString());
-            label_corps->setEnabled(false);
+        label_corps = new QTextBrowser;
+            label_corps->setText(message->getContent().toString());
+            //label_corps->setEnabled(true);
+            label_corps->setOpenLinks(false);
+            connect(label_corps, SIGNAL(anchorClicked(const QUrl &)),this, SLOT(lienHypertexte(const QUrl &)));
+
 
         layout_bottom = new QHBoxLayout;
             layout_bottom->setAlignment(Qt::AlignRight);
@@ -129,8 +133,9 @@ void DetailledEmail::slot_list_attachements(){
 }
 
 
-
-
+void DetailledEmail::lienHypertexte(const QUrl &lien){
+    QDesktopServices::openUrl(lien);
+}
 
 
 
