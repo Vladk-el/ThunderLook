@@ -57,16 +57,19 @@ void MainFrame::setActions(){
     // Action new mail
     action_new_mail = new QAction(tr("&Nouvel e-mail"), this);
     action_new_mail->setShortcut(QKeySequence("Ctrl+N"));
+    action_new_mail->setIcon(QIcon(":/data/img/toolbar/mail-add-icon.png"));
     menu_email->addAction(action_new_mail);
 
     // Action refresh
     action_refresh_mails = new QAction(tr("&Rafraichir"), this);
     action_refresh_mails->setShortcut(QKeySequence("F5"));
+    action_refresh_mails->setIcon(QIcon(":/data/img/toolbar/refresh-icon.png"));
     menu_email->addAction(action_refresh_mails);
 
     // Action new meeting
     action_new_meeting = new QAction(tr("&Réunion"), this);
     action_new_meeting->setShortcut(QKeySequence("Ctrl+R"));
+    action_new_meeting->setIcon(QIcon(":/data/img/toolbar/Groups-Meeting-Dark-icon.png"));
     menu_email->addAction(action_new_meeting);
 
     // Action quit
@@ -81,6 +84,7 @@ void MainFrame::setActions(){
 
     // Action contact
     action_contact = new QAction(tr("&Contacts"), this);
+    action_contact->setIcon(QIcon(":/data/img/toolbar/contacts-icon.png"));
     menu_account->addAction(action_contact);
 }
 
@@ -139,8 +143,6 @@ void MainFrame::setLayouts(){
             folders << req->value(rec.indexOf("name")).toString();
         }
     }
-
-    // folders << "Folder1" << "Folder2" << "Folder3" << "Folder4" ;
 
     model_folders = new QStringListModel(folders);
     view_list_folders = new QListView;

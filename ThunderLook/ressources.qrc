@@ -1,5 +1,9 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>./data/img/send_mail/send_mail-48.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/data/img/toolbar">
+        <file>data/img/send_mail/send_mail-48.png</file>
+        <file>data/img/toolbar/mail-add-icon.png</file>
+        <file>data/img/toolbar/refresh-icon.png</file>
+        <file>data/img/toolbar/Groups-Meeting-Dark-icon.png</file>
+        <file>data/img/toolbar/contacts-icon.png</file>
+    </qresource>
 </RCC>
